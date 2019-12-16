@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title> login </title>
+
+    <!-- Bootstrap -->
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link th:href="@{/css/font-awesome.min.css}" rel="stylesheet">
+    <!-- NProgress -->
+    <link th:href="@{/css/nprogress.css}" rel="stylesheet">
+    <!-- Animate.css -->
+    <link th:href="@{/css/animate.min.css}" rel="stylesheet">
+
+    <!-- Custom Theme Style -->
+    <link th:href="@{/css/custom.min.css}" rel="stylesheet">
+</head>
+
+<body class="login">
+<div>
+    <a class="hiddenanchor" id="signup"></a>
+    <a class="hiddenanchor" id="signin"></a>
+
+    <div class="login_wrapper">
+        <div class="animate form login_form">
+            <section class="login_content">
+                <form>
+                    <h1 th:text="#{login.pleaseSignIn}"></h1>
+                    <div>
+                        <input type="text" class="form-control" th:placeholder="#{login.Username}" required=""/>
+                    </div>
+                    <div>
+                        <input type="password" class="form-control" th:placeholder="#{login.Password}" required=""/>
+                    </div>
+                    <div style="font-size: 20px;">
+                        <a class="btn btn-default submit" th:href="@{/index}" style="font-size: 20px;">[[#{login.signIn}]]</a>
+
+                    </div>
+
+                    <div class="clearfix"></div>
+
+                    <div class="separator" style="font-size: 15px;">
+                        <p class="change_link">[[#{login.newToSite}]]&nbsp;
+                            <a href="#signup" class="to_register"
+                               style="font-size: 15px;">[[#{login.createAccount}]]</a>
+                        </p>
+
+                        <div class="clearfix"></div>
+                        <br/>
+
+                        <div>
+                            <h1 th:text="#{login.HUTManager}">HUT&nbsp;&nbsp;&nbsp;Manager</h1>
+                            <h6><a th:href="@{/login(l='zh_CN')}">中文</a>|&nbsp;&nbsp;&nbsp;&nbsp;<a
+                                    th:href="@{/login(l='en_US')}">English</a>
+                            </h6>
+                        </div>
+                    </div>
+                </form>
+            </section>
+        </div>
+
+        <div id="register" class="animate form registration_form">
+            <section class="login_content">
+                <form>
+                    <h1 th:text="#{login.createAccount}">Create Account</h1>
+                    <div>
+                        <input type="text" class="form-control" th:placeholder="#{login.Username}" required=""/>
+                    </div>
+                    <div>
+                        <input type="email" class="form-control" th:placeholder="#{login.Email}" required=""/>
+                    </div>
+                    <div>
+                        <input type="password" class="form-control" th:placeholder="#{login.Password}" required=""/>
+                    </div>
+                    <div>
+                        <a class="btn btn-default submit" th:href="@{/index}" style="font-size: 20px;">[[#{login.Submit}]]</a>
+                    </div>
+
+                    <div class="clearfix"></div>
+
+                    <div class="separator" style="font-size: 15px;">
+                        <p class="change_link">[[#{login.alreadyAMember}]]&nbsp;
+                            <a href="#signin" class="to_register" style="font-size: 15px;">[[#{login.pleaseSignIn}]]</a>
+                        </p>
+
+                        <div class="clearfix"></div>
+                        <br/>
+
+                        <div>
+                            <h1 th:text="#{login.HUTManager}">HUT&nbsp;&nbsp;&nbsp;Manager</h1>
+
+                            <!--    url会自动把 # 转成 %23  暂不解决
+                             <h6><a th:href="@{/login(l='zh_CN')}">中文</a>|&nbsp;&nbsp;&nbsp;&nbsp;<a
+                                     th:href="@{/login(l='en_US')}">English</a>
+                             </h6> -->
+
+                        </div>
+                    </div>
+                </form>
+            </section>
+        </div>
+    </div>
+</div>
+</body>
+</html>
