@@ -1,11 +1,20 @@
 package com.sy.controller;
 
+import com.sy.mapper.UserMapper;
+import com.sy.pojo.User;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class PageController {
+
+    @Autowired
+    UserMapper userMapper;
 
     @RequestMapping("/login")
     public String toLogin() {
@@ -14,7 +23,12 @@ public class PageController {
 
 
     @RequestMapping("/index")
-    public String toIndex() {
+    public String toIndex(
+            @RequestParam(value = "userId", defaultValue = "0") String userId,
+            Model model) {
+        User user = userMapper.getUserById(Long.parseLong(userId));
+        System.out.println(user);
+        model.addAttribute("user", user);
         return "index";
     }
 
@@ -24,8 +38,13 @@ public class PageController {
     }
 
     @RequestMapping("/userInfo")
-    public String toUserInfo() {
-        return "/page/user-setting";
+    public String toUserInfo(
+            @RequestParam(value = "userId", defaultValue = "0") String userId,
+            Model model) {
+        User user = userMapper.getUserById(Long.parseLong(userId));
+        System.out.println(user);
+        model.addAttribute("user", user);
+        return "/page/user-info";
     }
 
     @RequestMapping("/classManager")

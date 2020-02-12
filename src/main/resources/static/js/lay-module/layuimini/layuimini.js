@@ -690,12 +690,21 @@ layui.define(["element", "jquery"], function (exports) {
     /**
      * 打开新窗口
      */
-    $('body').on('click', '[data-tab]', function () {
+    $('body').on('click', '[data-tab]', '[id]', function () {
         var loading = layer.load(0, {shade: false, time: 2 * 1000});
+
         var tabId = $(this).attr('data-tab'),
-            href = $(this).attr('data-tab'),
+            //拿到当前id  用于查询
+            userId = $(this).attr('id'),
             title = $(this).html(),
             target = $(this).attr('target');
+        if (userId != null) {
+            var href = $(this).attr('data-tab') + '?userId=' + userId;
+        } else {
+            var href = $(this).attr('data-tab');
+        }
+        // alert(userId);
+        // alert(href);
         if (target == '_blank') {
             layer.close(loading);
             window.open(href, "_blank");
@@ -738,13 +747,20 @@ layui.define(["element", "jquery"], function (exports) {
     /**
      * 在iframe子菜单上打开新窗口
      */
-    $('body').on('click', '[data-iframe-tab]', function () {
+    $('body').on('click', '[data-iframe-tab]', '[id]', function () {
         var loading = parent.layer.load(0, {shade: false, time: 2 * 1000});
         var tabId = $(this).attr('data-iframe-tab'),
-            href = $(this).attr('data-iframe-tab'),
+            //携带userId
+            userId = $(this).attr('id'),
             icon = $(this).attr('data-icon'),
             title = $(this).attr('data-title'),
             target = $(this).attr('target');
+        if (userId != null) {
+            var href = $(this).attr('data-iframe-tab') + '?userId=' + userId;
+        } else {
+            var href = $(this).attr('data-iframe-tab');
+        }
+
         if (target == '_blank') {
             parent.layer.close(loading);
             window.open(href, "_blank");

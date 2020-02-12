@@ -44,14 +44,14 @@
             <!--            <li class="layui-nav-item">-->
             <!--                <a href="javascript:;" data-refresh="刷新"><i class="fa fa-refresh"></i></a>-->
             <!--            </li>-->
-            <!--            <li class="layui-nav-item">-->
-            <!--                <a href="javascript:;" data-clear="清理" class="layuimini-clear"><i class="fa fa-trash-o"></i></a>-->
-            <!--            </li>-->
+            <li class="layui-nav-item">
+                <img id="iconTest" th:src="@{${user.userImg}}" width='30px' height='30px'/>
+            </li>
             <li class="layui-nav-item layuimini-setting">
-                <a href="javascript:;">admin</a>
+                <a href="javascript:;">[[${user.userName}]]</a>
                 <dl class="layui-nav-child">
                     <dd>
-                        <a href="javascript:;" data-iframe-tab="page/user-setting.html" data-title="基本资料"
+                        <a href="javascript:;" data-iframe-tab="/userInfo" th:id="${user.userId}" data-title="基本资料"
                            data-icon="fa fa-gears">基本资料</a>
                     </dd>
                     <dd>
@@ -78,7 +78,7 @@
 
             <li class="layui-nav-item">
                 <a href="javascript:;" class="layui-menu-tips" data-type="tabAdd" data-tab-mpi="m-p-i-1"
-                   data-tab="/userInfo" target="_self">
+                   data-tab="/userInfo" th:id="${user.userId}" target="_self">
                     <i class="layui-icon layui-icon-username" style="width: 14px; height: 14px;"></i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span
                         class="layui-left-nav"> 个人信息</span>
                 </a>

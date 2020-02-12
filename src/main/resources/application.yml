@@ -41,3 +41,8 @@ mybatis:
   # _转换为 驼峰
   configuration:
     map-underscore-to-camel-case: true
+
+#log配置
+logging:
+  pattern:
+    console: "%d - %msg%n"

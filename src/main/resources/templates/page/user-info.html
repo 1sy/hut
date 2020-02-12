@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>基本资料</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" th:href="@{/lib/layui-v2.5.4/css/layui.css}" media="all">
+    <link rel="stylesheet" th:href="@{/css/public.css}" media="all">
+    <script th:src="@{/lib/layui-v2.5.4/layui.all.js}" charset="utf-8"></script>
+    <!--    <script th:src="@{/lib/layui-v2.5.4/lay/modules/layer.js}" charset="utf-8"></script>-->
+    <script th:src="@{https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js}"></script>
+    <style>
+        .layui-form-item .layui-input-company {
+            width: auto;
+            padding-right: 10px;
+            line-height: 38px;
+        }
+    </style>
+
+    <script>
+        $(function () {
+
+            $('#submitInfo').on('click', function () {
+
+                var file = $('#userImg').get(0).files[0];
+                if (file) {
+                    layer.confirm('确认修改？', {
+                        btn: ['确认', '取消'] //按钮
+                    }, function () {
+                        layer.msg('修改成功', {icon: 1});
+                        $("form[name='updateForm']").submit();
+                        //通过jquery  实现对父页面中头像的操作
+                        var src = $("#img1").attr("src");
+                        $("body", parent.document).find('#iconTest').replaceWith('<img id="iconTest" src=' + src + ' width="30px" height="30px"/>');
+
+                    }, function () {
+                    });
+                } else {
+                    layer.tips('请选择上传图片', '#submitInfo');
+                }
+            });
+        });
+
+    </script>
+
+</head>
+<body>
+
+
+<div class="layuimini-container">
+    <div class="layuimini-main">
+        <form name="updateForm" th:action="@{/updateUserInfo}" method="post" enctype="multipart/form-data">
+            <div class="layui-form layuimini-form">
+                <input name="userId" th:value="${user.userId}" hidden/>
+                <div class="layui-form-item">
+                    <label class="layui-form-label required">账号</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="userName" lay-verify="required" lay-reqtext="管理账号不能为空"
+                               placeholder="请输入管理账号" th:value="${user.userName}" class="layui-input"
+                               disabled="disabled">
+                        <tip>填写自己管理账号的名称。</tip>
+                    </div>
+                </div>
+                <!--            <div class="layui-form-item">-->
+                <!--                <label class="layui-form-label required">密码</label>-->
+                <!--                <div class="layui-input-block">-->
+                <!--                    <input type="number" name="phone" lay-verify="required" lay-reqtext="手机不能为空" placeholder="请输入手机"-->
+                <!--                           th:value="" class="layui-input">-->
+                <!--                </div>-->
+                <!--            </div>-->
+                <div class="layui-form-item">
+                    <label class="layui-form-label">邮箱</label>
+                    <div class="layui-input-block">
+                        <input type="email" name="userEmail" placeholder="请输入邮箱" th:value="${user.userEmail}"
+                               class="layui-input">
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">头像</label>
+                    <div class="layui-input-block">
+                        <div id="imgPreview">
+                            <img id="img1" th:src="@{${user.userImg}}" th:value="${user.userImg}" height="100px"/>
+                        </div>
+                        <input style="border-color: white" type="file"
+                               th:value="${user.userImg}"
+                               name="userImg" id="userImg"
+                               onchange="previewImage(this)"/>
+                    </div>
+
+
+                </div>
+
+
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <!--lay-submit lay-filter="saveBtn"-->
+                        <button type="button" id="submitInfo" class="layui-btn">保存信息</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    // layui.use(['form', 'layuimini'], function () {
+    //     var form = layui.form,
+    //         layer = layui.layer,
+    //         layuimini = layui.layuimini;
+    //
+    //     //监听提交
+    //     form.on('submit(saveBtn)', function (data) {
+    //         var index = layer.alert(JSON.stringify(data.field), {
+    //             title: '最终的提交信息'
+    //         }, function () {
+    //             layer.close(index);
+    //             layuimini.closeCurrentTab();
+    //         });
+    //         return false;
+    //     });
+    //
+    // });
+
+    function previewImage(imgFile) {
+        //取出文件的后缀名
+        var filextension = imgFile.value.substring(imgFile.value.lastIndexOf("."), imgFile.value.length);
+        filextension = filextension.toLowerCase();
+        //判断必须是图片文件
+        if ((filextension != '.jpg') && (filextension != '.gif') && (filextension != '.jpeg') && (filextension != '.png') && (filextension != '.bmp')) {
+            alert("对不起，系统仅支持标准格式的照片，请您调整格式后重新上传，谢谢 !");
+            imgFile.focus();
+        } else {
+            var path;
+            if (document.all) { //IE
+                imgFile.select();
+                path = document.selection.createRange().text;
+                //selection 代表了当前激活选中区，即高亮文本块，和/或文档中用户可执行某些操作的其它元素。
+                //createRange().text 运用IE滤镜获取数据
+                // alert(path);
+                document.getElementById("imgPreview").innerHTML = "";
+                document.getElementById("imgPreview").style.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true',sizingMethod='scale',src=\"" + path + "\")";
+                //使用IE滤镜效果
+            } else {//非IE
+                path = window.URL.createObjectURL(imgFile.files[0]);
+                //得到文件资源的URL
+                //         	            alert(path);
+                document.getElementById("imgPreview").innerHTML = "<img id='img1' width='120px' height='100px' src='" + path + "'/>";
+                //将path指向的文件资源显示为图片
+            }
+        }
+    }
+
+</script>
+</body>
+</html>
