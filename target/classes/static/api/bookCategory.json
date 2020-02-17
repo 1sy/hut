@@ -1,0 +1,497 @@
+{
+  "code": 0,
+  "msg": "",
+  "count": 1000,
+  "data": [
+    {
+      "categoryId": 10000,
+      "categoryType": "0",
+      "categoryName": "科学"
+    },
+    {
+      "categoryId": 10001,
+      "categoryType": "1",
+      "categoryName": "人文"
+    },
+    {
+      "categoryId": 10002,
+      "categoryType": "2",
+      "categoryName": "历史"
+    },
+    {
+      "categoryId": 10005,
+      "categoryType": "3",
+      "categoryName": "体育"
+    },
+    {
+      "categoryId": 10004,
+      "categoryType": "5",
+      "categoryName": "数学"
+    },
+    {
+      "categoryId": 10001,
+      "categoryType": "1",
+      "categoryName": "人文"
+    },
+    {
+      "categoryId": 10002,
+      "categoryType": "2",
+      "categoryName": "历史"
+    },
+    {
+      "categoryId": 10005,
+      "categoryType": "3",
+      "categoryName": "体育"
+    },
+    {
+      "categoryId": 10001,
+      "categoryType": "1",
+      "categoryName": "人文"
+    },
+    {
+      "categoryId": 10002,
+      "categoryType": "2",
+      "categoryName": "历史"
+    },
+    {
+      "categoryId": 10005,
+      "categoryType": "3",
+      "categoryName": "体育"
+    },
+    {
+      "categoryId": 10001,
+      "categoryType": "1",
+      "categoryName": "人文"
+    },
+    {
+      "categoryId": 10002,
+      "categoryType": "2",
+      "categoryName": "历史"
+    },
+    {
+      "categoryId": 10005,
+      "categoryType": "3",
+      "categoryName": "体育"
+    },
+    {
+      "categoryId": 10001,
+      "categoryType": "1",
+      "categoryName": "人文"
+    },
+    {
+      "categoryId": 10002,
+      "categoryType": "2",
+      "categoryName": "历史"
+    },
+    {
+      "categoryId": 10005,
+      "categoryType": "3",
+      "categoryName": "体育"
+    },
+    {
+      "categoryId": 10001,
+      "categoryType": "1",
+      "categoryName": "人文"
+    },
+    {
+      "categoryId": 10002,
+      "categoryType": "2",
+      "categoryName": "历史"
+    },
+    {
+      "categoryId": 10005,
+      "categoryType": "3",
+      "categoryName": "体育"
+    },
+    {
+      "categoryId": 10001,
+      "categoryType": "1",
+      "categoryName": "人文"
+    },
+    {
+      "categoryId": 10002,
+      "categoryType": "2",
+      "categoryName": "历史"
+    },
+    {
+      "categoryId": 10005,
+      "categoryType": "3",
+      "categoryName": "体育"
+    },
+    {
+      "categoryId": 10001,
+      "categoryType": "1",
+      "categoryName": "人文"
+    },
+    {
+      "categoryId": 10002,
+      "categoryType": "2",
+      "categoryName": "历史"
+    },
+    {
+      "categoryId": 10005,
+      "categoryType": "3",
+      "categoryName": "体育"
+    },
+    {
+      "categoryId": 10001,
+      "categoryType": "1",
+      "categoryName": "人文"
+    },
+    {
+      "categoryId": 10002,
+      "categoryType": "2",
+      "categoryName": "历史"
+    },
+    {
+      "categoryId": 10005,
+      "categoryType": "3",
+      "categoryName": "体育"
+    },
+    {
+      "categoryId": 10001,
+      "categoryType": "1",
+      "categoryName": "人文"
+    },
+    {
+      "categoryId": 10002,
+      "categoryType": "2",
+      "categoryName": "历史"
+    },
+    {
+      "categoryId": 10005,
+      "categoryType": "3",
+      "categoryName": "体育"
+    },
+    {
+      "categoryId": 10001,
+      "categoryType": "1",
+      "categoryName": "人文"
+    },
+    {
+      "categoryId": 10002,
+      "categoryType": "2",
+      "categoryName": "历史"
+    },
+    {
+      "categoryId": 10005,
+      "categoryType": "3",
+      "categoryName": "体育"
+    },
+    {
+      "categoryId": 10001,
+      "categoryType": "1",
+      "categoryName": "人文"
+    },
+    {
+      "categoryId": 10002,
+      "categoryType": "2",
+      "categoryName": "历史"
+    },
+    {
+      "categoryId": 10005,
+      "categoryType": "3",
+      "categoryName": "体育"
+    },
+    {
+      "categoryId": 10001,
+      "categoryType": "1",
+      "categoryName": "人文"
+    },
+    {
+      "categoryId": 10002,
+      "categoryType": "2",
+      "categoryName": "历史"
+    },
+    {
+      "categoryId": 10005,
+      "categoryType": "3",
+      "categoryName": "体育"
+    },
+    {
+      "categoryId": 10001,
+      "categoryType": "1",
+      "categoryName": "人文"
+    },
+    {
+      "categoryId": 10002,
+      "categoryType": "2",
+      "categoryName": "历史"
+    },
+    {
+      "categoryId": 10005,
+      "categoryType": "3",
+      "categoryName": "体育"
+    },
+    {
+      "categoryId": 10001,
+      "categoryType": "1",
+      "categoryName": "人文"
+    },
+    {
+      "categoryId": 10002,
+      "categoryType": "2",
+      "categoryName": "历史"
+    },
+    {
+      "categoryId": 10005,
+      "categoryType": "3",
+      "categoryName": "体育"
+    },
+    {
+      "categoryId": 10001,
+      "categoryType": "1",
+      "categoryName": "人文"
+    },
+    {
+      "categoryId": 10002,
+      "categoryType": "2",
+      "categoryName": "历史"
+    },
+    {
+      "categoryId": 10005,
+      "categoryType": "3",
+      "categoryName": "体育"
+    },
+    {
+      "categoryId": 10001,
+      "categoryType": "1",
+      "categoryName": "人文"
+    },
+    {
+      "categoryId": 10002,
+      "categoryType": "2",
+      "categoryName": "历史"
+    },
+    {
+      "categoryId": 10005,
+      "categoryType": "3",
+      "categoryName": "体育"
+    },
+    {
+      "categoryId": 10001,
+      "categoryType": "1",
+      "categoryName": "人文"
+    },
+    {
+      "categoryId": 10002,
+      "categoryType": "2",
+      "categoryName": "历史"
+    },
+    {
+      "categoryId": 10005,
+      "categoryType": "3",
+      "categoryName": "体育"
+    },
+    {
+      "categoryId": 10001,
+      "categoryType": "1",
+      "categoryName": "人文"
+    },
+    {
+      "categoryId": 10002,
+      "categoryType": "2",
+      "categoryName": "历史"
+    },
+    {
+      "categoryId": 10005,
+      "categoryType": "3",
+      "categoryName": "体育"
+    },
+    {
+      "categoryId": 10001,
+      "categoryType": "1",
+      "categoryName": "人文"
+    },
+    {
+      "categoryId": 10002,
+      "categoryType": "2",
+      "categoryName": "历史"
+    },
+    {
+      "categoryId": 10005,
+      "categoryType": "3",
+      "categoryName": "体育"
+    },
+    {
+      "categoryId": 10001,
+      "categoryType": "1",
+      "categoryName": "人文"
+    },
+    {
+      "categoryId": 10002,
+      "categoryType": "2",
+      "categoryName": "历史"
+    },
+    {
+      "categoryId": 10005,
+      "categoryType": "3",
+      "categoryName": "体育"
+    },
+    {
+      "categoryId": 10001,
+      "categoryType": "1",
+      "categoryName": "人文"
+    },
+    {
+      "categoryId": 10002,
+      "categoryType": "2",
+      "categoryName": "历史"
+    },
+    {
+      "categoryId": 10005,
+      "categoryType": "3",
+      "categoryName": "体育"
+    },
+    {
+      "categoryId": 10001,
+      "categoryType": "1",
+      "categoryName": "人文"
+    },
+    {
+      "categoryId": 10002,
+      "categoryType": "2",
+      "categoryName": "历史"
+    },
+    {
+      "categoryId": 10005,
+      "categoryType": "3",
+      "categoryName": "体育"
+    },
+    {
+      "categoryId": 10001,
+      "categoryType": "1",
+      "categoryName": "人文"
+    },
+    {
+      "categoryId": 10002,
+      "categoryType": "2",
+      "categoryName": "历史"
+    },
+    {
+      "categoryId": 10005,
+      "categoryType": "3",
+      "categoryName": "体育"
+    },
+    {
+      "categoryId": 10001,
+      "categoryType": "1",
+      "categoryName": "人文"
+    },
+    {
+      "categoryId": 10002,
+      "categoryType": "2",
+      "categoryName": "历史"
+    },
+    {
+      "categoryId": 10005,
+      "categoryType": "3",
+      "categoryName": "体育"
+    },
+    {
+      "categoryId": 10001,
+      "categoryType": "1",
+      "categoryName": "人文"
+    },
+    {
+      "categoryId": 10002,
+      "categoryType": "2",
+      "categoryName": "历史"
+    },
+    {
+      "categoryId": 10005,
+      "categoryType": "3",
+      "categoryName": "体育"
+    },
+    {
+      "categoryId": 10001,
+      "categoryType": "1",
+      "categoryName": "人文"
+    },
+    {
+      "categoryId": 10002,
+      "categoryType": "2",
+      "categoryName": "历史"
+    },
+    {
+      "categoryId": 10005,
+      "categoryType": "3",
+      "categoryName": "体育"
+    },
+    {
+      "categoryId": 10001,
+      "categoryType": "1",
+      "categoryName": "人文"
+    },
+    {
+      "categoryId": 10002,
+      "categoryType": "2",
+      "categoryName": "历史"
+    },
+    {
+      "categoryId": 10005,
+      "categoryType": "3",
+      "categoryName": "体育"
+    },
+    {
+      "categoryId": 10001,
+      "categoryType": "1",
+      "categoryName": "人文"
+    },
+    {
+      "categoryId": 10002,
+      "categoryType": "2",
+      "categoryName": "历史"
+    },
+    {
+      "categoryId": 10005,
+      "categoryType": "3",
+      "categoryName": "体育"
+    },
+    {
+      "categoryId": 10001,
+      "categoryType": "1",
+      "categoryName": "人文"
+    },
+    {
+      "categoryId": 10002,
+      "categoryType": "2",
+      "categoryName": "历史"
+    },
+    {
+      "categoryId": 10005,
+      "categoryType": "3",
+      "categoryName": "体育"
+    },
+    {
+      "categoryId": 10001,
+      "categoryType": "1",
+      "categoryName": "人文"
+    },
+    {
+      "categoryId": 10002,
+      "categoryType": "2",
+      "categoryName": "历史"
+    },
+    {
+      "categoryId": 10005,
+      "categoryType": "3",
+      "categoryName": "体育"
+    },
+    {
+      "categoryId": 10001,
+      "categoryType": "1",
+      "categoryName": "人文"
+    },
+    {
+      "categoryId": 10002,
+      "categoryType": "2",
+      "categoryName": "历史"
+    },
+    {
+      "categoryId": 10005,
+      "categoryType": "3",
+      "categoryName": "体育"
+    }
+  ]
+}

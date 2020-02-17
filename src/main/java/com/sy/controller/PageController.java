@@ -47,6 +47,12 @@ public class PageController {
         return "/page/user-info";
     }
 
+    @RequestMapping("/bookCategoryManager")
+    public String toBookCategoryManager() {
+        return "/page/book-category";
+    }
+
+
     @RequestMapping("/classManager")
     public String toClassManager() {
         return "/page/form";

@@ -31,17 +31,22 @@
     <div class="login_wrapper">
         <div class="animate form login_form">
             <section class="login_content">
-                <form>
+                <form th:action="@{/userLogin}" method="post">
                     <h1 th:text="#{login.pleaseSignIn}"></h1>
+                    <p class="text-danger">[[${msg}]]</p>
                     <div>
-                        <input type="text" class="form-control" th:placeholder="#{login.Username}" required=""/>
+                        <input type="text" name="userName" class="form-control" th:placeholder="#{login.Username}"
+                               required="" value="qwe"/>
                     </div>
                     <div>
-                        <input type="password" class="form-control" th:placeholder="#{login.Password}" required=""/>
+                        <input type="password" name="userPassword" class="form-control"
+                               th:placeholder="#{login.Password}" required="" value="qwe"/>
                     </div>
                     <div style="font-size: 20px;">
-                        <a class="btn btn-default submit" th:href="@{/index}" style="font-size: 20px;">[[#{login.signIn}]]</a>
-
+                        <!--                        <a type="submit" class="btn btn-default submit"  >[[#{login.signIn}]]</a>-->
+                        <button type="submit" class="btn btn-outline-light text-dark" style="font-size: 20px;">
+                            [[#{login.signIn}]]
+                        </button>
                     </div>
 
                     <div class="clearfix"></div>

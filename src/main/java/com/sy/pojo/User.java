@@ -22,9 +22,8 @@ public class User {
     @Email(message = "必须为邮箱格式")
     private String userEmail;
     private BigDecimal userBalance;
-    @Range(min = 0,max = 1,message = "必须为0或1")
+    @Range(min = 0, max = 1, message = "必须为0或1")
     private short userLevel;
-
 
 
 }

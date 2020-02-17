@@ -31,10 +31,18 @@ spring:
   messages:
     basename: i18n/login
 
-  #指定myBatis的核心配置文件与Mapper映射文件
-  # 注意：对应实体类的路径
+
+
 mybatis:
+  #指定myBatis的核心配置文件与Mapper映射文件
   mapper-locations: classpath:mybatis/mapper/*.xml
+  # 注意：对应实体类的路径
   type-aliases-package: com.sy.pojo
+  # _转换为 驼峰
   configuration:
     map-underscore-to-camel-case: true
+
+##log配置   %d - %msg%n
+logging:
+  pattern:
+    console: " %clr(%d){yellow} %clr(%-5level){cyan} --- %clr(%logger){magenta} | %msg%n"
