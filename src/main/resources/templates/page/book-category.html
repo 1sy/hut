@@ -9,28 +9,42 @@
     <link rel="stylesheet" th:href="@{/lib/layui-v2.5.4/css/layui.css}" media="all">
 </head>
 <body>
-<table class="layui-hide" id="test" lay-filter="test"></table>
-
 <!-- 头部左侧工具栏 -->
 <script type="text/html" id="toolbarDemo">
-
     <form class="layui-form layui-form-pane" action="">
         <div class="layui-form-item">
             <label class="layui-form-label">类目ID</label>
             <div class="layui-input-inline">
-                <input type="text" name="classify" autocomplete="off" class="layui-input">
+                <input id="categoryId" type="text" required name="classify" autocomplete="off" class="layui-input">
             </div>
 
             <div class="layui-inline">
-                <a class="layui-btn" lay-submit="" lay-filter="data-search-btn">搜索</a>
+                <a class="layui-btn" lay-submit lay-filter="data-search-btn">搜索</a>
                 <button class="layui-btn data-add-btn" id="addButton" type="button">添加</button>
             </div>
         </div>
     </form>
-
-
 </script>
 
+<!--添加弹出层-->
+<div style="display: none;" id="addForm" align="center">
+    <form class="layui-form layui-form-pane" action="" id="addMainForm">
+        <div class="layui-form-item layui-inline ">
+            <br/><br/>
+            <input type="text" id="addCategoryType" name="addCategoryType" lay-verify="required|number"
+                   placeholder="类目编号"
+                   autocomplete="off"
+                   class="layui-input"><br/><br/>
+            <input type="text" id="addCategoryName" name="addCategoryName" lay-verify="required" placeholder="类目名称"
+                   autocomplete="off"
+                   class="layui-input"><br/> <br/>
+            <button type="button" class="layui-btn" lay-submit lay-filter="addSubmit">提交</button>
+        </div>
+    </form>
+</div>
+
+<!--表格-->
+<table class="layui-hide" id="test" lay-filter="test"></table>
 <script type="text/html" id="barDemo">
     <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
@@ -38,16 +52,18 @@
 
 <script th:src="@{/lib/layui-v2.5.4/layui.js}" charset="utf-8"></script>
 <script th:src="@{/lib/jquery-3.4.1/jquery-3.4.1.min.js}"></script>
-
 <script>
-    layui.use(['form', 'table'], function () {
+    layui.use(['form', 'table', 'layer'], function () {
         var $ = layui.jquery,
             form = layui.form,
-            table = layui.table;
+            table = layui.table,
+            layer = layui.layer,
+            categoryId = "";
 
+        //表格渲染
         table.render({
             elem: '#test',
-            url: '/getAllBookCategory',
+            url: '/getAllBookCategory?categoryId=' + categoryId,
             toolbar: '#toolbarDemo', //开启头部工具栏，并为其绑定左侧模板
             cellMinWidth: 120,
             defaultToolbar: ['filter', 'exports'],
@@ -74,29 +90,64 @@
         });
 
         // 监听搜索操作
-        form.on('submit(data-search-btn)', function (data) {
-            var result = JSON.stringify(data.field);
-            layer.alert(result, {
-                title: '最终的搜索信息'
-            });
-
-            //执行搜索重载
-            table.reload('currentTableId', {
-                page: {
-                    curr: 1
-                }
-                , where: {
-                    searchParams: result
-                }
-            }, 'data');
-
+        form.on('submit(data-search-btn)', function () {
+            if ($('#categoryId').val() != null) {
+                categoryId = $('#categoryId').val();
+            }
+            //刷新表单
+            reload();
+            //阻止表单提交
             return false;
         });
 
 
-        // 监听添加操作
-        $("#addButton").on("click", function () {
-            layer.msg('添加数据');
+        // 监听添加操作 实现添加弹出层
+        function addFunction() {
+            $("#addButton").on("click", function () {
+                layer.open({
+                    type: 1,
+                    title: '添加类目',
+                    content: $('#addForm'),
+                    area: ['300px', '280px'],
+                    success: function () {
+                        //jquery对象默认是数组形式，要选择当前对象才有reset方法
+                        $("#addMainForm")[0].reset();
+                    }
+                });
+            });
+        }
+
+        addFunction();
+
+        //添加弹出层表单提交
+        form.on('submit(addSubmit)', function (data) {
+            $.post("/addBookCategory", {"bookCategory": JSON.stringify(data.field)}, function (result) {
+                //刷新表单
+                reload();
+                layer.closeAll();
+                layer.msg(result);
+            });
+            return false;
+        });
+
+        //异步实现编号、名称查重
+        $("#addCategoryType").change(function () {
+            $.post("/checkCategoryType", {"categoryType": $("#addCategoryType").val()}, function (result) {
+                if (result == 1) {
+                    layer.tips('已存在', '#addCategoryType', {
+                        tips: [2, '#008B8B'] //配置气泡位置和颜色   FF4500 橘色也还行，但有点突兀
+                    });
+                }
+            });
+        });
+        $("#addCategoryName").change(function () {
+            $.post("/checkCategoryName", {"categoryName": $("#addCategoryName").val()}, function (result) {
+                if (result == 1) {
+                    layer.tips('已存在', '#addCategoryName', {
+                        tips: [2, '#008B8B'] //配置气泡位置和颜色   FF4500 橘色也还行，但有点突兀
+                    });
+                }
+            });
         });
 
 
@@ -121,8 +172,23 @@
                 });
             }
         });
+
+        //把重复操作封装到一起
+        function reload() {
+            //执行搜索重载
+            table.reload('test', {
+                url: "/getAllBookCategory",
+                page: { //表示重载后从第几页开始
+                    curr: 1
+                }
+                , where: {  //携带的参数
+                    categoryId: categoryId
+                }
+            });
+            //搜索事件发生后，由于表格重新渲染，其他时间会失效，故再次调用
+            addFunction();
+        }
     });
 </script>
-
 </body>
 </html>

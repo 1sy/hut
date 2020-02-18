@@ -16,4 +16,11 @@ class HutApplicationTests {
         System.out.println(dataSource.getClass());
     }
 
+    @Test
+    void test() {
+        String a="";
+        System.out.println(a == null);
+        System.out.println(a.isEmpty());
+        System.out.println(a.equals(""));
+    }
 }

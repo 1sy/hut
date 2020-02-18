@@ -45,4 +45,4 @@ mybatis:
 ##log配置   %d - %msg%n
 logging:
   pattern:
-    console: " %clr(%d{HH:mm:ss}){yellow} %clr(%-5level){cyan} --- %clr(%logger){magenta} | %msg%n"
+    console: " %clr(%d{HH:mm:ss}){yellow} %clr(%-5level){cyan} --- %clr(%logger){magenta} --- %msg%n"
