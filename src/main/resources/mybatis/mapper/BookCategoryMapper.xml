@@ -5,6 +5,10 @@
 
 <mapper namespace="com.sy.mapper.BookCategoryMapper">
 
+    <select id="getTypeAndName" resultType="BookCategory">
+        select b.category_type,b.category_name  from book_category b
+    </select>
+
     <select id="getAllCount" resultType="java.lang.Integer">
     select count(*) from book_category
     </select>
@@ -28,4 +32,12 @@
     <select id="checkCategoryName" resultType="BookCategory">
     select * from book_category where category_name = #{categoryName}
     </select>
+
+    <update id="updateBookCategory">
+    update book_category set category_type = #{categoryType},category_name = #{categoryName}  where category_id = #{categoryId}
+    </update>
+
+    <delete id="deleteBookCategory">
+        delete from book_category where category_id = #{categoryId}
+    </delete>
 </mapper>

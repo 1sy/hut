@@ -45,14 +45,29 @@ public class BookCategoryController {
     }
 
     @PostMapping("/checkCategoryType")
-    public int checkCategoryType(@RequestParam("categoryType") Integer categoryType) {
+    public Integer checkCategoryType(@RequestParam("categoryType") Integer categoryType) {
         BookCategory bookCategory = bookCategoryMapper.checkCategoryType(categoryType);
         return bookCategory != null ? 1 : 0;
     }
 
     @PostMapping("/checkCategoryName")
-    public int checkCategoryName(@RequestParam("categoryName") String categoryName) {
-        BookCategory bookCategory = bookCategoryMapper.checkCategoryName(categoryName);
-        return bookCategory != null ? 1 : 0;
+    public Integer checkCategoryName(@RequestParam("categoryName") String categoryName) {
+        // 之前用对象接受 但是会返回一对多的错误 暂时不知具体为何  之后再做修改
+        List<BookCategory> list = bookCategoryMapper.checkCategoryName(categoryName);
+        return list.isEmpty() ? 0 : 1;
     }
+
+    @PostMapping("/updateBookCategory")
+    public String updateBookCategory(@RequestParam("bookCategory") String bookCategoryJSON) {
+        JSONObject jsonObject = JSON.parseObject(bookCategoryJSON);
+        Integer i = bookCategoryMapper.updateBookCategory(Integer.parseInt(jsonObject.get("categoryType").toString()), jsonObject.get("categoryName").toString(), Integer.parseInt(jsonObject.get("categoryId").toString()));
+        return i == 1 ? "修改成功" : "修改失败";
+    }
+
+    @PostMapping("/deleteBookCategory")
+    public Integer deleteBookCategory(@RequestParam("categoryId") Integer categoryId) {
+        Integer i = bookCategoryMapper.deleteBookCategory(categoryId);
+        return i;
+    }
+
 }

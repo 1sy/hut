@@ -10,7 +10,10 @@ import java.util.List;
 @Mapper
 @Repository
 public interface BookCategoryMapper {
+
+    List<BookCategory> getTypeAndName();
     //目前还没有体会到 包装类计算时的问题   之后遇到后要记录
+
     Integer getAllCount();
 
     Integer getCountById(@Param("categoryId") String categoryId);
@@ -22,5 +25,9 @@ public interface BookCategoryMapper {
 
     BookCategory checkCategoryType(@Param("categoryType") Integer categoryType);
 
-    BookCategory checkCategoryName(@Param("categoryName") String categoryName);
+    List<BookCategory> checkCategoryName(@Param("categoryName") String categoryName);
+
+    Integer updateBookCategory(@Param("categoryType") Integer categoryType, @Param("categoryName") String categoryName, @Param("categoryId") Integer categoryId);
+
+    Integer deleteBookCategory(@Param("categoryId") Integer categoryId);
 }

@@ -1,20 +1,41 @@
 package com.sy.controller;
 
+import com.sy.mapper.BookCategoryMapper;
+import com.sy.mapper.BookInfoMapper;
 import com.sy.mapper.UserMapper;
-import com.sy.pojo.User;
+import com.sy.pojo.*;
+import com.sy.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 @Controller
 public class PageController {
 
     @Autowired
     UserMapper userMapper;
+    @Autowired
+    BookCategoryMapper bookCategoryMapper;
+    @Autowired
+    BookService bookService;
+    @Autowired
+    BookInfoMapper bookInfoMapper;
 
     @RequestMapping("/login")
     public String toLogin() {
@@ -27,7 +48,6 @@ public class PageController {
             @RequestParam(value = "userId", defaultValue = "0") String userId,
             Model model) {
         User user = userMapper.getUserById(Long.parseLong(userId));
-        System.out.println(user);
         model.addAttribute("user", user);
         return "index";
     }
@@ -42,7 +62,6 @@ public class PageController {
             @RequestParam(value = "userId", defaultValue = "0") String userId,
             Model model) {
         User user = userMapper.getUserById(Long.parseLong(userId));
-        System.out.println(user);
         model.addAttribute("user", user);
         return "/page/user-info";
     }
@@ -52,6 +71,10 @@ public class PageController {
         return "/page/book-category";
     }
 
+    @RequestMapping("/bookInfoManager")
+    public String toBookInfoManager() {
+        return "/page/book-info";
+    }
 
     @RequestMapping("/classManager")
     public String toClassManager() {
@@ -61,6 +84,22 @@ public class PageController {
     @RequestMapping("/bookManager")
     public String toBookManager() {
         return "/page/form";
+    }
+
+    @RequestMapping("/toBookAdd")
+    public String toBookAdd(Model model) {
+        List<BookCategory> categoryList = bookCategoryMapper.getTypeAndName();
+        model.addAttribute("categoryList", categoryList);
+        return "/page/book-add";
+    }
+
+    @GetMapping("/toBookUpdate")
+    public String toBookUpdate(@RequestParam("bookId") String bookId, Model model) {  //RequestBody 必须是json  RequestParam 必须是key-value形式
+        List<BookCategory> categoryList = bookCategoryMapper.getTypeAndName();
+        BookInfo book = bookInfoMapper.getBookById(bookId);
+        model.addAttribute("categoryList", categoryList);
+        model.addAttribute("book", book);
+        return "/page/book-update";
     }
 
 }

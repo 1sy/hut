@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>教材类目</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" th:href="@{/lib/layui-v2.5.4/css/layui.css}" media="all">
+    <style>
+        .layui-table-cell {
+            height: 45px;
+            line-height: 45px;
+        }
+    </style>
+</head>
+<body>
+<!-- 头部左侧工具栏 -->
+<script type="text/html" id="toolbarDemo">
+    <form class="layui-form layui-form-pane" action="">
+        <div class="layui-form-item">
+            <label class="layui-form-label">教材名称</label>
+            <div class="layui-input-inline">
+                <input id="bookName" type="text" required name="classify" autocomplete="off" class="layui-input">
+            </div>
+
+            <div class="layui-inline">
+                <a class="layui-btn" lay-submit lay-filter="data-search-btn">搜索</a>
+                <a class="layui-btn" th:href="@{/toBookAdd}">添加</a>
+                <button class="layui-btn data-add-btn" lay-event="getCheckData" type="button">删除选中行数据</button>
+            </div>
+        </div>
+    </form>
+</script>
+
+<!--表格-->
+<table class="layui-hide" id="test" lay-filter="test"></table>
+<script type="text/html" id="barDemo">
+    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+
+<script th:src="@{/lib/layui-v2.5.4/layui.js}" charset="utf-8"></script>
+<script th:src="@{/lib/jquery-3.4.1/jquery-3.4.1.min.js}"></script>
+<script>
+    layui.use(['form', 'table', 'layer'], function () {
+        var $ = layui.jquery,
+            form = layui.form,
+            table = layui.table,
+            layer = layui.layer,
+            bookName = "";
+
+        //表格渲染
+        var mainTable = table.render({
+            elem: '#test',
+            url: '/getAllBook?bookName=' + bookName,
+            toolbar: '#toolbarDemo', //开启头部工具栏，并为其绑定左侧模板
+            cellMinWidth: 60,
+
+            defaultToolbar: ['filter', 'exports'],
+            title: '用户数据表',
+            cols: [
+                [{
+                    type: 'checkbox',
+                    fixed: 'left'    //左侧复选框
+                }, {
+                    field: 'bookId',
+                    width: 275,
+                    title: '教材ID'
+                }, {
+                    field: 'bookImg',
+                    title: '封面',
+                    width: 60,
+                    align: 'center',
+                    templet: function (d) {
+                        return '<div><img src="' + d.bookImg + '"  width="30px" height="45px"></div>';
+                    }
+                }, {
+                    field: 'bookName',
+                    title: '教材名称',
+                    width: 120,
+                    align: 'center'
+                }, {
+                    field: 'bookPrice',
+                    title: '价格',
+                    width: 90,
+                    sort: true,
+                    align: 'center'
+                }, {
+                    field: 'bookStock',
+                    title: '库存',
+                    width: 90,
+                    sort: true,
+                    align: 'center'
+                }, {
+                    field: 'bookAuthor',
+                    title: '作者',
+                    width: 100,
+                    align: 'center'
+                }, {
+                    field: 'bookPress',
+                    title: '出版商',
+                    width: 150,
+                    align: 'center'
+                }, {
+                    field: 'bookIntroduce',
+                    title: '简介',
+                    align: 'center'
+                }, {
+                    field: 'categoryName',
+                    title: '教材类目',
+                    width: 90,
+                    align: 'center'
+                }, {
+                    field: 'bookStatus',
+                    title: '状态',
+                    width: 110,
+                    align: 'center',
+                    templet: function (d) {
+                        if (d.bookStatus == 1) {
+                            return '<input type="checkbox" name="bookStatus" value="' + d.bookStatus + '" title="上架" lay-filter="lockDemo" checked="">';
+                        } else {
+                            return '<input type="checkbox" name="bookStatus" value="' + d.bookStatus + '" title="上架" lay-filter="lockDemo" >';
+                        }
+                    }
+                }, {
+                    fixed: 'right',
+                    title: '操作',
+                    width: 130,
+                    toolbar: '#barDemo',
+                    align: 'center'
+                }]
+            ],
+            page: true,
+            done: function () {
+                hoverOpenImg();//显示大图
+            }
+        });
+
+        //图片放大
+        function hoverOpenImg() {
+            var img_show = null; // tips提示
+            $('td img').hover(function () {
+                var img = "<img  src='" + $(this).attr('src') + "' style='width:130px;' />";
+                img_show = layer.tips(img, this, {
+                    tips: [2, 'rgba(41,41,41,.1)']  //rgba 最后一位是透明度
+                    , area: ['160px']
+                });
+            }, function () {
+                layer.close(img_show);
+            });
+            $('td img').attr('style', 'max-width:70px');
+        }
+
+        //监听上架、下架操作    搜索之后该功能失效 之后要在reload重新添加
+        function changeBookStatus() {
+            form.on('checkbox(lockDemo)', function (obj) {
+                //1 bookStatus：true
+                //获取当前元素的父级元素中第二列数据（复选框也算一列 0）  也就是该行数据中ID
+                var bookId = $(obj.elem).parents('tr').first().find('td').eq(1).text();
+                var bookStatus = obj.elem.checked == true ? 1 : 0;
+                $.post("/changeBookStatus", {"bookId": bookId, "bookStatus": bookStatus}, function (result) {
+                    //这里不需要刷新表格，只需要提示下用户就可以
+                    if (result == 1) {
+                        layer.tips(bookStatus == 1 ? "上架成功" : "下架成功", obj.othis);
+                    } else {
+                        layer.tips(bookStatus == 1 ? "上架失败" : "下架失败", obj.othis);
+                    }
+                });
+            });
+        }
+
+        changeBookStatus();
+
+        // 监听搜索操作
+        form.on('submit(data-search-btn)', function () {
+            if ($('#bookName').val() != null) {
+                bookName = $('#bookName').val();
+            }
+            //刷新表单
+            reload();
+            //阻止表单提交
+            return false;
+        });
+
+
+        //头工具栏  批量删除
+        table.on('toolbar(test)', function (obj) {
+            var checkStatus = table.checkStatus(obj.config.id);
+            if (obj.event == 'getCheckData') {
+                var data = checkStatus.data;
+                if (data[0] == null) {
+                    layer.msg("请选中要删除的行");
+                } else {
+                    // layer.alert(JSON.stringify(data));
+                    var bookIdList = new Array();
+                    for (var i = 0; i < data.length; i++) {
+                        bookIdList[i] = data[i].bookId;  //将选中行bookId以数组形式传递到controller
+                    }
+                    //layer.alert(JSON.stringify(bookIdList));
+                    $.post("/multipleDelete", {"bookIdList": JSON.stringify(bookIdList)}, function (result) {
+                        if (result == 1) {
+                            layer.msg("批量删除成功");
+                            reload();
+                        }
+                    });
+                }
+            }
+        });
+
+
+        //监听行工具事件  编辑和删除
+        table.on('tool(test)', function (obj) {
+            //获得当前行数据 所有   获取单个的话 直接 data.属性名
+            var data = obj.data;
+            if (obj.event === 'del') {
+                layer.confirm('确定要删除吗？', {
+                    btn: ['确定', '取消'] //可以无限个按钮
+                }, function (index) {
+                    $.post("/deleteBookById", {"bookId": data.bookId}, function (result) {
+                        if (result == 1) {
+                            obj.del();
+                            layer.msg("删除成功");
+                        }
+                    });
+                    layer.close(index);
+                }, function (index) {
+                    layer.close(index);
+                });
+            } else if (obj.event === 'edit') {
+                window.location.href = "/toBookUpdate?bookId=" + data.bookId;
+            }
+        });
+
+        //把重复操作封装到一起
+        function reload() {
+            //执行搜索重载
+            table.reload('test', {
+                url: "/getAllBook",
+                page: { //表示重载后从第几页开始
+                    curr: 1
+                }
+                , where: {  //携带的参数
+                    bookName: bookName
+                }
+            });
+            //重新渲染表格之后添加状态改变事件
+            changeBookStatus();
+        }
+    });
+</script>
+</body>
+</html>

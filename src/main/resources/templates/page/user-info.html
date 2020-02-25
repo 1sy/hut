@@ -25,8 +25,8 @@
 
 <div class="layuimini-container">
     <div class="layuimini-main">
-        <form name="updateForm" th:action="@{/updateUserInfo}" method="post" enctype="multipart/form-data">
-            <div class="layui-form layuimini-form">
+        <div class="layui-form layuimini-form">
+            <form name="updateForm" th:action="@{/updateUserInfo}" method="post" enctype="multipart/form-data">
                 <input name="userId" th:value="${user.userId}" hidden/>
                 <div class="layui-form-item">
                     <label class="layui-form-label required">账号</label>
@@ -50,24 +50,21 @@
                     <div class="layui-input-block">
                         <div id="imgPreview">
                             <img id="img1" th:src="@{${user.userImg}}" th:value="${user.userImg}" height="100px"/>
+                            <input hidden name="img" th:value="${user.userImg}">
                         </div>
                         <input style="border-color: white" type="file"
                                th:value="${user.userImg}"
                                name="userImg" id="userImg"
                                onchange="previewImage(this)"/>
                     </div>
-
-
                 </div>
-
-
                 <div class="layui-form-item">
                     <div class="layui-input-block">
                         <button type="button" id="submitInfo" class="layui-btn">保存信息</button>
                     </div>
                 </div>
-            </div>
-        </form>
+            </form>
+        </div>
     </div>
 </div>
 
@@ -77,9 +74,8 @@
             layer = layui.layer;
 
         $('#submitInfo').on('click', function () {
-
-            var file = $('#userImg').get(0).files[0];
-            if (file) {
+            var img = $('#img1').attr("value");
+            if (img.length > 0) {
                 layer.confirm('确认修改？', {
                     btn: ['确认', '取消'] //按钮
                 }, function () {
@@ -88,11 +84,11 @@
                     //通过jquery  实现对父页面中头像的操作
                     var src = $("#img1").attr("src");
                     $("body", parent.document).find('#iconTest').replaceWith('<img id="iconTest" src=' + src + ' width="30px" height="30px"/>');
-
                 }, function () {
+                    layer.msg('修改失败', {icon: 1});
                 });
             } else {
-                layer.tips('请选择上传图片', '#submitInfo');
+                layer.tips('请上传图片', '#submitInfo');
             }
         });
 

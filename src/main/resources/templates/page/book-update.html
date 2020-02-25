@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>添加教材</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" th:href="@{/lib/layui-v2.5.4/css/layui.css}" media="all">
+    <link rel="stylesheet" th:href="@{/css/public.css}" media="all">
+    <script th:src="@{/lib/layui-v2.5.4/layui.js}" charset="utf-8"></script>
+    <script th:src="@{/lib/jquery-3.4.1/jquery-3.4.1.min.js}"></script>
+    <style>
+        .layui-form-item {
+            width: auto;
+            padding-right: 10px;
+            line-height: 38px;
+        }
+    </style>
+
+
+</head>
+<body>
+
+
+<div class="layuimini-container">
+    <div class="layuimini-main">
+        <div class="layui-form layuimini-form">
+            <form name="updateBookForm" class="layui-form layui-form-pane" th:action="@{/updateBook}" method="post"
+                  enctype="multipart/form-data">
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">教材ID</label>
+                        <div class="layui-inline">
+                            <input type="text" id="bookId" name="bookId" lay-verify="required"
+                                   class="layui-input" th:value="${book.bookId}" readonly style="width: 265px">
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">封面</label>
+                        <div class="layui-input-inline" pane="">
+                            <div id="imgPreview">
+                                <img id="img1" height="100px" th:src="${book.bookImg}"/>
+                                <input hidden name="img" th:value="${book.bookImg}"/>
+                            </div>
+                            <input style="border-color: white" type="file"
+                                   name="bookImg" id="bookImg"
+                                   onchange="previewImage(this)"/>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">教材名</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="bookName" lay-verify="required" autocomplete="off"
+                                   class="layui-input" th:value="${book.bookName}">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">价格</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="bookPrice" lay-verify="required|number" autocomplete="off"
+                                   class="layui-input" th:value="${book.bookPrice}">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">库存</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="bookStock" lay-verify="required|number" autocomplete="off"
+                                   class="layui-input" th:value="${book.bookStock}">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">作者</label>
+                        <div class="layui-input-inline">
+                            <input type="tel" name="bookAuthor" lay-verify="required" autocomplete="off"
+                                   class="layui-input" th:value="${book.bookAuthor}">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">出版社</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="bookPress" lay-verify="required" autocomplete="off"
+                                   class="layui-input" th:value="${book.bookPress}">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">类目</label>
+                        <div class="layui-input-inline">
+                            <select id="categoryType" name="categoryType" lay-verify="required" lay-search="">
+                                <option th:each="category : ${categoryList}" th:value="${category.categoryType}"
+                                        th:text="${category.categoryName}"
+                                        th:selected="${category.categoryType == book.categoryType}"></option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class=" layui-inline">
+                        <label class="layui-form-label">状态</label>
+                        <div class="layui-input-block">
+                            <input type="checkbox" id="bookStatus" name="bookStatus" lay-skin="switch"
+                                   lay-text="上架|下架" th:checked="${book.bookStatus==1}">
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label" style="width:67%">简介</label>
+                    <div class="layui-input-block">
+                    <textarea name="bookIntroduce" placeholder="请输入内容" class="layui-textarea"
+                              style="width:67%">[[${book.bookIntroduce}]]</textarea>
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button type="button" id="submitInfo" class="layui-btn">保存信息</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    layui.use(['form', 'layer'], function () {
+        var form = layui.form,
+            layer = layui.layer;
+
+        $('#submitInfo').on('click', function () {
+            var img = $('#img1').attr("value");
+            if (img.length > 0) {
+                layer.confirm('确认修改？', {
+                    btn: ['确认', '取消'] //按钮
+                }, function () {
+                    $("form[name='updateBookForm']").submit();
+                    parent.location.reload();
+                }, function () {
+                });
+            } else {
+                layer.tips('请上传图片', '#submitInfo');
+            }
+        });
+    });
+
+    function previewImage(imgFile) {
+        //取出文件的后缀名
+        var filextension = imgFile.value.substring(imgFile.value.lastIndexOf("."), imgFile.value.length);
+        filextension = filextension.toLowerCase();
+        //判断必须是图片文件
+        if ((filextension != '.jpg') && (filextension != '.gif') && (filextension != '.jpeg') && (filextension != '.png') && (filextension != '.bmp')) {
+            alert("对不起，系统仅支持标准格式的照片，请您调整格式后重新上传，谢谢 !");
+            imgFile.focus();
+        } else {
+            var path;
+            if (document.all) { //IE
+                imgFile.select();
+                path = document.selection.createRange().text;
+                //selection 代表了当前激活选中区，即高亮文本块，和/或文档中用户可执行某些操作的其它元素。
+                //createRange().text 运用IE滤镜获取数据
+                // alert(path);
+                document.getElementById("imgPreview").innerHTML = "";
+                document.getElementById("imgPreview").style.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true',sizingMethod='scale',src=\"" + path + "\")";
+                //使用IE滤镜效果
+            } else {//非IE
+                path = window.URL.createObjectURL(imgFile.files[0]);
+                //得到文件资源的URL
+                //         	            alert(path);
+                document.getElementById("imgPreview").innerHTML = "<img id='img1' width='120px' height='100px' src='" + path + "'/>";
+                //将path指向的文件资源显示为图片
+            }
+        }
+    }
+
+</script>
+</body>
+</html>

@@ -65,15 +65,20 @@ public class UserController {
     public String updateUserInfo(@RequestParam("userImg") MultipartFile userImg,
                                  @RequestParam("userEmail") String userEmail,
                                  @RequestParam("userId") String userId,
+                                 @RequestParam("img") String img,
                                  RedirectAttributes redirectAttributes) throws Exception {
-        //获得图片后缀
-        String extUserImg = userImg.getOriginalFilename().substring(userImg.getOriginalFilename().lastIndexOf("."));
-        //生成唯一名称
-        String fileName = UUID.randomUUID().toString().replaceAll("-", "") + extUserImg;
-        //资源images 文件夹目录
-        String filePath = System.getProperty("user.dir").toString() + "\\src\\main\\resources\\static\\images\\";
-        FileCopyUtils.copy(userImg.getInputStream(), new FileOutputStream(new File(filePath + fileName)));
-        userMapper.updateUserInfo(Long.parseLong(userId), userEmail, "/images/" + fileName);
+        String userImgName = img;
+        if (!userImg.isEmpty()) {
+            //获得图片后缀
+            String extUserImg = userImg.getOriginalFilename().substring(userImg.getOriginalFilename().lastIndexOf("."));
+            //生成唯一名称
+            String fileName = UUID.randomUUID().toString().replaceAll("-", "") + extUserImg;
+            //资源images 文件夹目录
+            String filePath = System.getProperty("user.dir").toString() + "\\src\\main\\resources\\static\\images\\userImg\\";
+            FileCopyUtils.copy(userImg.getInputStream(), new FileOutputStream(new File(filePath + fileName)));
+            userImgName = "/images/userImg/" + fileName;
+        }
+        userMapper.updateUserInfo(Long.parseLong(userId), userEmail, userImgName);
         redirectAttributes.addAttribute("userId", userId);
 
         return "redirect:/userInfo";

@@ -15,7 +15,7 @@ import java.util.Date;
 @NoArgsConstructor
 @Validated
 public class User {
-    private long userId;
+    private Long userId;
     private String userName;
     private String userPassword;
     private String userImg;

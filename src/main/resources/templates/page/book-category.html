@@ -34,14 +34,54 @@
             <input type="text" id="addCategoryType" name="addCategoryType" lay-verify="required|number"
                    placeholder="类目编号"
                    autocomplete="off"
-                   class="layui-input"><br/><br/>
+                   class="layui-input categoryType"><br/><br/>
             <input type="text" id="addCategoryName" name="addCategoryName" lay-verify="required" placeholder="类目名称"
                    autocomplete="off"
-                   class="layui-input"><br/> <br/>
-            <button type="button" class="layui-btn" lay-submit lay-filter="addSubmit">提交</button>
+                   class="layui-input categoryName"><br/> <br/>
+            <button type="button" class="layui-btn form-submit" lay-submit lay-filter="addSubmit" id="addSubmit">提交
+            </button>
         </div>
     </form>
 </div>
+<!--修改弹出层-->
+<div id="updateForm" align="center" style="display: none">
+    <form class="layui-form layui-form-pane" action="" lay-filter="updateForm">
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <br/><br/>
+                <label class="layui-form-label">类目ID</label>
+                <div class="layui-inline">
+                    <input type="text" id="updateCategoryId" name="categoryId" lay-verify="required"
+                           class="layui-input" readonly>
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">类目编号</label>
+                <div class="layui-inline">
+                    <input type="text" id="updateCategoryType" name="categoryType" lay-verify="required|number"
+                           class="layui-input categoryType">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">类目名称</label>
+                <div class="layui-inline">
+                    <input type="text" id="updateCategoryName" name="categoryName" lay-verify="required"
+                           class="layui-input categoryName">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <button type="button" class="layui-btn form-submit" lay-submit lay-filter="updateSubmit" id="updateSubmit">
+                提交
+            </button>
+        </div>
+    </form>
+</div>
+
 
 <!--表格-->
 <table class="layui-hide" id="test" lay-filter="test"></table>
@@ -61,7 +101,7 @@
             categoryId = "";
 
         //表格渲染
-        table.render({
+        var mainTable = table.render({
             elem: '#test',
             url: '/getAllBookCategory?categoryId=' + categoryId,
             toolbar: '#toolbarDemo', //开启头部工具栏，并为其绑定左侧模板
@@ -136,7 +176,10 @@
                 if (result == 1) {
                     layer.tips('已存在', '#addCategoryType', {
                         tips: [2, '#008B8B'] //配置气泡位置和颜色   FF4500 橘色也还行，但有点突兀
-                    });
+                    });  //若已存在 ，禁用button
+                    $(".form-submit").attr("disabled", "disabled");
+                } else {
+                    $(".form-submit").removeAttr("disabled");
                 }
             });
         });
@@ -146,32 +189,92 @@
                     layer.tips('已存在', '#addCategoryName', {
                         tips: [2, '#008B8B'] //配置气泡位置和颜色   FF4500 橘色也还行，但有点突兀
                     });
+                    $(".form-submit").attr("disabled", "disabled");
+                } else {
+                    $(".form-submit").removeAttr("disabled");
                 }
             });
         });
 
 
-        //监听行工具事件
+        //监听行工具事件  编辑和删除
         table.on('tool(test)', function (obj) {
+            //获得当前行数据 所有   获取单个的话 直接 data.属性名
             var data = obj.data;
-            //console.log(obj)
             if (obj.event === 'del') {
-                layer.confirm('真的删除行么', function (index) {
-                    obj.del();
+                layer.confirm('确定要删除吗？', {
+                    btn: ['确定', '取消'] //可以无限个按钮
+                }, function (index) {
+                    $.post("/deleteBookCategory", {"categoryId": data.categoryId}, function (result) {
+                        //刷新表单
+                        // reload();
+                        if (result == 1) {
+                            obj.del();
+                            layer.msg("删除成功");
+                        }
+                    });
+                    layer.close(index);
+                }, function (index) {
                     layer.close(index);
                 });
             } else if (obj.event === 'edit') {
-                layer.prompt({
-                    formType: 2,
-                    value: data.email
-                }, function (value, index) {
-                    obj.update({
-                        email: value
-                    });
-                    layer.close(index);
+                //JSON.stringify(data)
+                layer.open({
+                    type: 1,
+                    title: '修改类目',
+                    content: $('#updateForm'),
+                    area: ['450px', '325px'],
+                    success: function () {
+                        //赋值
+                        form.val("updateForm", data);
+                    }
                 });
+
+                //修改弹出层表单提交
+                form.on('submit(updateSubmit)', function (data) {
+                    $.post("/updateBookCategory", {"bookCategory": JSON.stringify(data.field)}, function (result) {
+                        //刷新表单 reload();
+                        //表单重新渲染会直接跳到第一页，现用方提供的update  据说对toolbar无效，之后应注意
+                        obj.update({
+                            categoryType: data.field.categoryType,
+                            categoryName: data.field.categoryName
+                        });
+                        layer.closeAll();
+                        layer.msg(result);
+                    });
+                    return false;
+                });
+
+
             }
         });
+
+        //异步实现修改表单编号、名称查重  之后将两个封装成一个方法
+        $("#updateCategoryType").change(function () {
+            $.post("/checkCategoryType", {"categoryType": $("#updateCategoryType").val()}, function (result) {
+                if (result == 1) {
+                    layer.tips('已存在', '#updateCategoryType', {
+                        tips: [2, '#008B8B'] //配置气泡位置和颜色   FF4500 橘色也还行，但有点突兀
+                    });  //若已存在 ，禁用button
+                    $("#addSubmit").attr("disabled", "disabled");
+                } else {
+                    $("#addSubmit").removeAttr("disabled");
+                }
+            });
+        });
+        $("#updateCategoryName").change(function () {
+            $.post("/checkCategoryName", {"categoryName": $("#updateCategoryName").val()}, function (result) {
+                if (result == 1) {
+                    layer.tips('已存在', '#updateCategoryType', {
+                        tips: [2, '#008B8B'] //配置气泡位置和颜色   FF4500 橘色也还行，但有点突兀
+                    });
+                    $("#updateSubmit").attr("disabled", "disabled");
+                } else {
+                    $("#updateSubmit").removeAttr("disabled");
+                }
+            });
+        });
+
 
         //把重复操作封装到一起
         function reload() {

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sy.mapper.BookInfoMapper">
+
+    <select id="getAllCount" resultType="java.lang.Integer">
+    select count(*) from book_info
+    </select>
+
+    <select id="getCountByName" resultType="java.lang.Integer">
+    select count(*) from book_info where book_name like #{bookName}
+    </select>
+
+    <select id="getBookByPage" resultType="BookInfo">
+    select * from book_info where book_name like #{bookName} limit #{page},#{limit}
+    </select>
+
+    <insert id="addBook">
+        insert into book_info (book_id, book_img, book_name, book_price,book_stock,book_author, book_press, book_introduce,book_status,category_type)
+        values (#{bookId},#{bookImg},#{bookName},#{bookPrice},#{bookStock},#{bookAuthor},#{bookPress},#{bookIntroduce},#{bookStatus},#{categoryType})
+    </insert>
+
+    <update id="changeBookStatus">
+        update book_info set book_status=#{bookStatus} where book_id=#{bookId}
+    </update>
+
+    <delete id="multipleDelete" parameterType="list">
+        delete from book_info where book_id in
+        <foreach collection="deleteList" index="index" item="deleteItem" open="(" separator="," close=")">
+            #{deleteItem}
+        </foreach>
+    </delete>
+
+    <select id="getBookById" resultType="BookInfo">
+        select * from book_info where book_id=#{bookId}
+    </select>
+
+    <update id="updateBook">
+        update book_info set book_img= #{bookImg}, book_name= #{bookName}, book_price= #{bookPrice},book_stock= #{bookStock},book_author= #{bookAuthor}, book_press= #{bookPress}, book_introduce= #{bookIntroduce},book_status= #{bookStatus},category_type= #{categoryType} where book_id= #{bookId}
+    </update>
+
+    <update id="updateBookNoImg">
+        update book_info set book_name= #{bookName}, book_price= #{bookPrice},book_stock= #{bookStock},book_author= #{bookAuthor}, book_press= #{bookPress}, book_introduce= #{bookIntroduce},book_status= #{bookStatus},category_type= #{categoryType} where book_id= #{bookId}
+    </update>
+
+    <delete id="deleteBookById" parameterType="list">
+        delete from book_info where book_id = #{bookId}
+    </delete>
+</mapper>
