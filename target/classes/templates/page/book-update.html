@@ -140,22 +140,19 @@
             layer = layui.layer;
 
         $('#submitInfo').on('click', function () {
-
-            // var file = $('#bookImg').get(0).files[0];
-            // if (file) {
-            layer.confirm('确认修改？', {
-                btn: ['确认', '取消'] //按钮
-            }, function () {
-                $("form[name='updateBookForm']").submit();
-                parent.location.reload();
-            }, function () {
-            });
-            // } else {
-            //     layer.tips('请选择上传图片', '#submitInfo');
-            // }
+            var img = $('#img1').attr("value");
+            if (img.length > 0) {
+                layer.confirm('确认修改？', {
+                    btn: ['确认', '取消'] //按钮
+                }, function () {
+                    $("form[name='updateBookForm']").submit();
+                    parent.location.reload();
+                }, function () {
+                });
+            } else {
+                layer.tips('请上传图片', '#submitInfo');
+            }
         });
-
-
     });
 
     function previewImage(imgFile) {
