@@ -1,14 +1,23 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
     <meta charset="UTF-8">
     <title>Document</title>
     <link rel="stylesheet" type="text/css" th:href="@{/css/main.css}">
     <link rel="stylesheet" type="text/css" th:href="@{/lib/layui-v2.5.4/css/layui.css}">
+    <script th:src="@{/lib/jquery-3.4.1/jquery-3.4.1.min.js}"></script>
     <script th:src="@{/lib/layui-v2.5.4/layui.js}" charset="utf-8"></script>
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <style>
+        .bookMain {
+            overflow: hidden;
+            line-height: 24px;
+            padding: 0 20px;
+        }
+    </style>
 </head>
 <body>
 
@@ -16,11 +25,18 @@
     <div class="site-nav w1200">
         <p class="sn-back-home">
             <i class="layui-icon layui-icon-home"></i>
-            <a href="#">首页</a>
+            <a th:href="@{/mall}">首页</a>
         </p>
         <div class="sn-quick-menu">
-            <div class="login"><a th:href="@{/mall/toLogin}">登录</a></div>
-            <div class="sp-cart"><a th:href="@{/mall/toShopCart}">购物车</a></div>
+            <div class="login" th:if="${session.user==null}"><a th:href="@{/mall/toLogin}">登录</a></div>
+            <div class="login" th:if="${session.user!=null}">[[${session.user.userName}]]</div>
+            <div class="sp-cart">
+                <form name="shoppingCartForm" th:action="@{/mall/toShopCart}">
+                    <button type="button" id="toShoppingCart" style="font-size: 14px;border:0;cursor:pointer;">
+                        购物车
+                    </button>
+                </form>
+            </div>
         </div>
     </div>
 </div>
@@ -35,13 +51,12 @@
             </h1>
 
             <div class="mallSearch">
-                <form action="" class="layui-form" novalidate>
-                    <input type="text" name="title" required lay-verify="required" autocomplete="off"
-                           class="layui-input" placeholder="请输入需要的商品">
+                <form th:action="@{/mall/search}" class="layui-form" novalidate>
+                    <input type="text" name="bookInfo"  lay-verify="required" autocomplete="off"
+                           class="layui-input" value="" placeholder="请输入需要的教材">
                     <button class="layui-btn" lay-submit lay-filter="formDemo">
                         <i class="layui-icon layui-icon-search"></i>
                     </button>
-                    <input type="hidden" name="" value="">
                 </form>
             </div>
         </div>
@@ -61,192 +76,73 @@
         <div class="product-list-box">
             <div class="product-list w1200">
                 <div class="tab-title">
-                    <a href="javascript:;" class="active tuang" data-content="tuangou">最新上架</a>
-                    <a href="javascript:;" data-content="yukao">销量最高</a>
+                    <a href="javascript:;" class="active tuang" data-content="newBookList">最新上架</a>
+                    <a href="javascript:;" data-content="salesMaxList">销量最高</a>
                 </div>
-                <div class="list-cont" cont='tuangou'>
+                <div class="list-cont" cont='newBookList'>
                     <div class="item-box layui-clear">
-
-                        <div class="item">
-                            <img src="../res/static/img/tuan_img1.jpg" alt="">
+                        <div class="item" th:each="book:${newBookList}">
+                            <img th:src="@{${book.bookImg}}" alt="" width="290px" height="320px"><br>
                             <div class="text-box">
-                                <p class="title">宝宝专用硅胶环保饭碗四套+调羹+筷子自助学吃饭套装</p>
-                                <p class="plic">
-                                    <span class="ciur-pic">￥100.00</span>
-                                    <span class="Ori-pic">￥208.00</span>
-                                    <span class="discount">5折</span>
+                                <p class="bookMain" style="font-size: 20px;">
+                                    <span class="Ori-pic"><a th:href="@{/mall/Details(bookId=${book.bookId})}">[[${book.bookName}]]</a></span>
                                 </p>
-                            </div>
-                        </div>
-                        <div class="item">
-                            <img src="../res/static/img/tuan_img2.jpg" alt="">
-                            <div class="text-box">
-                                <p class="title">宝宝专用硅胶环保饭碗四套+调羹+筷子自助学吃饭套装</p>
-                                <p class="plic">
-                                    <span class="ciur-pic">￥100.00</span>
-                                    <span class="Ori-pic">￥208.00</span>
-                                    <span class="discount">5折</span>
+                                <p class="bookMain" style="font-size: 12px;">
+                                    <span style="color: #aaa;">[[${book.bookAuthor}]]</span>
                                 </p>
-                            </div>
-                        </div>
-                        <div class="item">
-                            <img src="../res/static/img/tuan_img3.jpg" alt="">
-                            <div class="text-box">
-                                <p class="title">宝宝专用硅胶环保饭碗四套+调羹+筷子自助学吃饭套装</p>
-                                <p class="plic">
-                                    <span class="ciur-pic">￥100.00</span>
-                                    <span class="Ori-pic">￥208.00</span>
-                                    <span class="discount">5折</span>
-                                </p>
-                            </div>
-                        </div>
-                        <div class="item">
-                            <img src="../res/static/img/tuan_img4.jpg" alt="">
-                            <div class="text-box">
-                                <p class="title">宝宝专用硅胶环保饭碗四套+调羹+筷子自助学吃饭套装</p>
-                                <p class="plic">
-                                    <span class="ciur-pic">￥100.00</span>
-                                    <span class="Ori-pic">￥208.00</span>
-                                    <span class="discount">5折</span>
-                                </p>
-                            </div>
-                        </div>
-                        <div class="item">
-                            <img src="../res/static/img/tuan_img1.jpg" alt="">
-                            <div class="text-box">
-                                <p class="title">宝宝专用硅胶环保饭碗四套+调羹+筷子自助学吃饭套装</p>
-                                <p class="plic">
-                                    <span class="ciur-pic">￥100.00</span>
-                                    <span class="Ori-pic">￥208.00</span>
-                                    <span class="discount">5折</span>
-                                </p>
-                            </div>
-                        </div>
-                        <div class="item">
-                            <img src="../res/static/img/tuan_img2.jpg" alt="">
-                            <div class="text-box">
-                                <p class="title">宝宝专用硅胶环保饭碗四套+调羹+筷子自助学吃饭套装</p>
-                                <p class="plic">
-                                    <span class="ciur-pic">￥100.00</span>
-                                    <span class="Ori-pic">￥208.00</span>
-                                    <span class="discount">5折</span>
-                                </p>
-                            </div>
-                        </div>
-                        <div class="item">
-                            <img src="../res/static/img/tuan_img3.jpg" alt="">
-                            <div class="text-box">
-                                <p class="title">宝宝专用硅胶环保饭碗四套+调羹+筷子自助学吃饭套装</p>
-                                <p class="plic">
-                                    <span class="ciur-pic">￥100.00</span>
-                                    <span class="Ori-pic">￥208.00</span>
-                                    <span class="discount">5折</span>
-                                </p>
-                            </div>
-                        </div>
-                        <div class="item">
-                            <img src="../res/static/img/tuan_img4.jpg" alt="">
-                            <div class="text-box">
-                                <p class="title">宝宝专用硅胶环保饭碗四套+调羹+筷子自助学吃饭套装</p>
-                                <p class="plic">
-                                    <span class="ciur-pic">￥100.00</span>
-                                    <span class="Ori-pic">￥208.00</span>
-                                    <span class="discount">5折</span>
+                                <p class="plic bookMain" style="font-size: 12px;">
+                                    <span class="ciur-pic" style="color: #c30;">￥[[${book.bookPrice}]]</span>
+                                    <span class="Ori-pic"
+                                          style="color: #aaa;">&nbsp;&nbsp;库存：[[${book.bookStock}]]</span>
+                                    <span class="discount" style="width: 50px;"><i
+                                            class="layui-icon layui-icon-cart"></i></span>
                                 </p>
                             </div>
                         </div>
                     </div>
-                    <!-- <div id="demo0" style="text-align: center;"></div> -->
                 </div>
-
-                <div class="list-cont layui-hide" cont='yukao'>
+                <div class="list-cont layui-hide" cont='salesMaxList'>
                     <div class="item-box layui-clear">
-                        <div class="item">
-                            <img src="../res/static/img/tuan_img4.jpg" alt="">
+                        <div class="item" th:each="book:${salesMaxList}">
+                            <img th:src="@{${book.bookImg}}" alt="" width="290px" height="320px"><br>
                             <div class="text-box">
-                                <p class="title">宝宝专用硅胶环保饭碗四套+调羹+筷子自助学吃饭套装</p>
-                                <p class="plic">
-                                    <span class="ciur-pic">￥100.00</span>
-                                    <span class="Ori-pic">￥208.00</span>
-                                    <span class="discount">5折</span>
+                                <p class="bookMain" style="font-size: 20px;">
+                                    <span class="Ori-pic"><a th:href="@{/mall/Details(bookId=${book.bookId})}">[[${book.bookName}]]</a></span>
+                                </p>
+                                <p class="bookMain" style="font-size: 12px;">
+                                    <span style="color: #aaa;">[[${book.bookAuthor}]]</span>
+                                </p>
+                                <p class="plic bookMain" style="font-size: 12px;">
+                                    <span class="ciur-pic" style="color: #c30;">￥[[${book.bookPrice}]]</span>
+                                    <span class="Ori-pic"
+                                          style="color: #aaa;">&nbsp;&nbsp;库存：[[${book.bookStock}]]</span>
+                                    <span class="discount" style="width: 50px;"><i
+                                            class="layui-icon layui-icon-cart"></i></span>
                                 </p>
                             </div>
                         </div>
-                        <div class="item">
-                            <img src="../res/static/img/tuan_img3.jpg" alt="">
-                            <div class="text-box">
-                                <p class="title">宝宝专用硅胶环保饭碗四套+调羹+筷子自助学吃饭套装</p>
-                                <p class="plic">
-                                    <span class="ciur-pic">￥100.00</span>
-                                    <span class="Ori-pic">￥208.00</span>
-                                    <span class="discount">5折</span>
-                                </p>
-                            </div>
-                        </div>
-                        <div class="item">
-                            <img src="../res/static/img/tuan_img2.jpg" alt="">
-                            <div class="text-box">
-                                <p class="title">宝宝专用硅胶环保饭碗四套+调羹+筷子自助学吃饭套装</p>
-                                <p class="plic">
-                                    <span class="ciur-pic">￥100.00</span>
-                                    <span class="Ori-pic">￥208.00</span>
-                                    <span class="discount">5折</span>
-                                </p>
-                            </div>
-                        </div>
-                        <div class="item">
-                            <img src="../res/static/img/tuan_img1.jpg" alt="">
-                            <div class="text-box">
-                                <p class="title">宝宝专用硅胶环保饭碗四套+调羹+筷子自助学吃饭套装</p>
-                                <p class="plic">
-                                    <span class="ciur-pic">￥100.00</span>
-                                    <span class="Ori-pic">￥208.00</span>
-                                    <span class="discount">5折</span>
-                                </p>
-                            </div>
-                        </div>
-                        <div class="item">
-                            <img src="../res/static/img/tuan_img4.jpg" alt="">
-                            <div class="text-box">
-                                <p class="title">宝宝专用硅胶环保饭碗四套+调羹+筷子自助学吃饭套装</p>
-                                <p class="plic">
-                                    <span class="ciur-pic">￥100.00</span>
-                                    <span class="Ori-pic">￥208.00</span>
-                                    <span class="discount">5折</span>
-                                </p>
-                            </div>
-                        </div>
-                        <div class="item">
-                            <img src="../res/static/img/tuan_img3.jpg" alt="">
-                            <div class="text-box">
-                                <p class="title">宝宝专用硅胶环保饭碗四套+调羹+筷子自助学吃饭套装</p>
-                                <p class="plic">
-                                    <span class="ciur-pic">￥100.00</span>
-                                    <span class="Ori-pic">￥208.00</span>
-                                    <span class="discount">5折</span>
-                                </p>
-                            </div>
-                        </div>
-                        <div class="item">
-                            <img src="../res/static/img/tuan_img2.jpg" alt="">
-                            <div class="text-box">
-                                <p class="title">宝宝专用硅胶环保饭碗四套+调羹+筷子自助学吃饭套装</p>
-                                <p class="plic">
-                                    <span class="ciur-pic">￥100.00</span>
-                                    <span class="Ori-pic">￥208.00</span>
-                                    <span class="discount">5折</span>
-                                </p>
-                            </div>
-                        </div>
-                        <div class="item">
-                            <img src="../res/static/img/tuan_img1.jpg" alt="">
-                            <div class="text-box">
-                                <p class="title">宝宝专用硅胶环保饭碗四套+调羹+筷子自助学吃饭套装</p>
-                                <p class="plic">
-                                    <span class="ciur-pic">￥100.00</span>
-                                    <span class="Ori-pic">￥208.00</span>
-                                    <span class="discount">5折</span>
-                                </p>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="footer-wrap">
+                <div class="footer w1200">
+                    <div class="title">
+                        <h3>特别推荐</h3>
+                    </div>
+                    <div class="list-box layui-clear" id="footerList">
+                        <div class="item" th:each="book:${stockMaxList}">
+                            <img th:src="@{${book.bookImg}}" width="320px" height="400px">
+                            <div class="text">       <!-- book + Stat状态变量  有index等属性-->
+                                <div class="right-title-number">[[${bookStat.count}]]</div>
+                                <div class="commod">
+                                    <p style="overflow: hidden; height: 48px; width: 220px;"
+                                       th:title="${book.bookIntroduce}">
+                                        <a th:href="@{/mall/Details(bookId=${book.bookId})}">[[${book.bookIntroduce}]]</a>
+                                    </p>
+                                    <span style="color: #c30;">￥[[${book.bookPrice}]]</span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -254,74 +150,52 @@
             </div>
         </div>
     </div>
+    <div hidden class="userId" th:if="${session.user==null}"></div>
+    <div hidden class="userId" th:if="${session.user!=null}">[[${session.user.userId}]]</div>
+    <script>
+        layui.use(['jquery', 'layer'], function () {
+            var $ = layui.$,
+                layer = layui.layer;
 
-
-    <div class="footer-wrap">
-        <div class="footer w1200">
-            <div class="title">
-                <h3>团购销量榜</h3>
-            </div>
-            <div class="list-box layui-clear" id="footerList">
-                <div class="item">
-                    <img src="../res/static/img/tuan_img5.jpg" alt="">
-                    <div class="text">
-                        <div class="right-title-number">1</div>
-                        <div class="commod">
-                            <p>宝宝打底衣棉麻透气不起球白色多色可选</p>
-                            <span>￥100.00</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="item">
-                    <img src="../res/static/img/tuan_img6.jpg" alt="">
-                    <div class="text">
-                        <div class="right-title-number">1</div>
-                        <div class="commod">
-                            <p>宝宝打底衣棉麻透气不起球白色多色可选</p>
-                            <span>￥100.00</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="item">
-                    <img src="../res/static/img/tuan_img7.jpg" alt="">
-                    <div class="text">
-                        <div class="right-title-number">1</div>
-                        <div class="commod">
-                            <p>宝宝打底衣棉麻透气不起球白色多色可选</p>
-                            <span>￥100.00</span>
-                        </div>
-                    </div>
-                </div>
-
-
-            </div>
-        </div>
-    </div>
-</div>
-</div>
-<script>
-
-    layui.use(['laypage', 'jquery'], function () {
-        var $ = layui.$;
-
-        // 模块切换
-        $('body').on('click', '*[data-content]', function () {
-            $(this).addClass('active').siblings().removeClass('active')
-            var dataConte = $(this).attr('data-content');
-            $('*[cont]').each(function (i, item) {
-                var itemCont = $(item).attr('cont');
-                console.log(item)
-                if (dataConte === itemCont) {
-                    $(item).removeClass('layui-hide');
-                } else {
-                    $(item).addClass('layui-hide');
-                }
+            // 模块切换
+            $('body').on('click', '*[data-content]', function () {
+                $(this).addClass('active').siblings().removeClass('active')
+                var dataConte = $(this).attr('data-content');
+                $('*[cont]').each(function (i, item) {
+                    var itemCont = $(item).attr('cont');
+                    console.log(item)
+                    if (dataConte === itemCont) {
+                        $(item).removeClass('layui-hide');
+                    } else {
+                        $(item).addClass('layui-hide');
+                    }
+                })
             })
-        })
-
-    });
-</script>
 
 
+            $('#toShoppingCart').on('click', function () {
+                var userId = $('.userId').text();
+                if (userId == '') {   //为空代表没有登陆 这时候只需要提交表单 shiro会自动拦截
+                    $("form[name='shoppingCartForm']").submit();
+                } else {
+                    $.post("/checkShoppingCart", {"userId": userId}, function (result) {
+                        if (result == 0) {
+                            layer.tips("购物车为空", "#toShoppingCart", {
+                                tips: [3, '#000000'] //配置气泡位置和颜色
+                            });
+                        } else {
+                            $("form[name='shoppingCartForm']").submit();
+                        }
+                    });
+                }
+
+            });
+
+        });
+
+
+    </script>
+
+</div>
 </body>
 </html>

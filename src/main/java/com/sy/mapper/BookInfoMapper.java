@@ -4,7 +4,6 @@ import com.sy.pojo.BookInfo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.bind.annotation.PostMapping;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -13,6 +12,11 @@ import java.util.List;
 @Repository
 public interface BookInfoMapper {
 
+    List<BookInfo> getNewBook();
+
+    List<BookInfo> getSalesMax();
+
+    List<BookInfo> getStockMax();
 
     List<BookInfo> getBookByPage(@Param("page") Integer page, @Param("limit") Integer limit, @Param("bookName") String bookName);
 
@@ -41,4 +45,10 @@ public interface BookInfoMapper {
     Integer updateBookNoImg(@Param("bookId") String bookId, @Param("bookName") String bookName, @Param("bookPrice") BigDecimal bookPrice,
                             @Param("bookStock") Integer bookStock, @Param("bookAuthor") String bookAuthor, @Param("bookPress") String bookPress, @Param("bookIntroduce") String bookIntroduce,
                             @Param("bookStatus") Integer bookStatus, @Param("categoryType") Integer categoryType);
+
+    List<BookInfo> getBookByInfo(String bookInfo);
+
+    List<BookInfo> getBookByCategory(@Param("page") Integer page, @Param("limit") Integer limit, @Param("categoryType")Integer categoryType);
+
+    Integer getCountByCategory(@Param("categoryType") Integer categoryType);
 }

@@ -3,27 +3,18 @@ package com.sy.controller;
 import com.sy.mapper.BookCategoryMapper;
 import com.sy.mapper.BookInfoMapper;
 import com.sy.mapper.UserMapper;
-import com.sy.pojo.*;
+import com.sy.pojo.BookCategory;
+import com.sy.pojo.BookInfo;
+import com.sy.pojo.User;
 import com.sy.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.FileCopyUtils;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.UUID;
 
 @Controller
 public class PageController {
@@ -63,34 +54,34 @@ public class PageController {
             Model model) {
         User user = userMapper.getUserById(Long.parseLong(userId));
         model.addAttribute("user", user);
-        return "/page/user-info";
+        return "page/user-info";
     }
 
     @RequestMapping("/bookCategoryManager")
     public String toBookCategoryManager() {
-        return "/page/book-category";
+        return "page/book-category";
     }
 
     @RequestMapping("/bookInfoManager")
     public String toBookInfoManager() {
-        return "/page/book-info";
+        return "page/book-info";
     }
 
     @RequestMapping("/classManager")
     public String toClassManager() {
-        return "/page/form";
+        return "page/form";
     }
 
     @RequestMapping("/bookManager")
     public String toBookManager() {
-        return "/page/form";
+        return "page/form";
     }
 
     @RequestMapping("/toBookAdd")
     public String toBookAdd(Model model) {
         List<BookCategory> categoryList = bookCategoryMapper.getTypeAndName();
         model.addAttribute("categoryList", categoryList);
-        return "/page/book-add";
+        return "page/book-add";
     }
 
     @GetMapping("/toBookUpdate")
@@ -99,7 +90,7 @@ public class PageController {
         BookInfo book = bookInfoMapper.getBookById(bookId);
         model.addAttribute("categoryList", categoryList);
         model.addAttribute("book", book);
-        return "/page/book-update";
+        return "page/book-update";
     }
 
 }

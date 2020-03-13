@@ -140,18 +140,13 @@
             layer = layui.layer;
 
         $('#submitInfo').on('click', function () {
-            var img = $('#img1').attr("value");
-            if (img.length > 0) {
-                layer.confirm('确认修改？', {
-                    btn: ['确认', '取消'] //按钮
-                }, function () {
-                    $("form[name='updateBookForm']").submit();
-                    parent.location.reload();
-                }, function () {
-                });
-            } else {
-                layer.tips('请上传图片', '#submitInfo');
-            }
+            layer.confirm('确认修改？', {
+                btn: ['确认', '取消'] //按钮
+            }, function () {
+                $("form[name='updateBookForm']").submit();
+                parent.location.reload();
+            }, function () {
+            });
         });
     });
 

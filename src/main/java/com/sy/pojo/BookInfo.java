@@ -19,6 +19,7 @@ public class BookInfo {
     private String bookPress;
     private String bookIntroduce;
     private Integer bookStatus;
+    private Integer bookSales;
     //这样会多加一个字段 但感觉比强转好多了
     private Integer categoryType;
     private String categoryName;

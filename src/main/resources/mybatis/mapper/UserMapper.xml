@@ -5,19 +5,19 @@
 
 <mapper namespace="com.sy.mapper.UserMapper">
 
-    <select id="getAll" resultType="User">
+    <select id="getAll" resultType="com.sy.pojo.User">
     select * from user
     </select>
 
-    <select id="getPwdByUsername" parameterType="java.lang.String" resultType="User">
+    <select id="getUserByUsername" parameterType="java.lang.String" resultType="com.sy.pojo.User">
     select * from user u where user_name=#{userName}
     </select>
 
-    <select id="getUserById" parameterType="java.lang.Long" resultType="User">
+    <select id="getUserById" parameterType="java.lang.Long" resultType="com.sy.pojo.User">
         select * from user u where user_id=#{userId}
     </select>
 
-    <update id="updateUserInfo" parameterType="User">
+    <update id="updateUserInfo" parameterType="com.sy.pojo.User">
         update user set user_email=#{userEmail},user_img=#{userImg} where  user_id=#{userId}
     </update>
 

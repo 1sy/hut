@@ -25,7 +25,7 @@
 
 <div class="layuimini-container">
     <div class="layuimini-main">
-        <div class="layui-form layuimini-form">
+        <div class="layui-form ">
             <form name="addBookForm" class="layui-form layui-form-pane" th:action="@{/addBook}" method="post"
                   enctype="multipart/form-data">
                 <div class="layui-form-item">
@@ -137,6 +137,7 @@
                     btn: ['确认', '取消'] //按钮
                 }, function () {
                     $("form[name='addBookForm']").submit();
+                    //这里不管怎么样都会reload  所以只能手动认证表单元素是否为空
                     parent.location.reload();
                 }, function () {
                 });

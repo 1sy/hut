@@ -13,9 +13,9 @@ public interface UserMapper {
 
     List<User> getAll();
 
-    User getPwdByUsername(@Param("userName") String userName);
+    User getUserByUsername(@Param("userName") String userName);
 
     User getUserById(@Param("userId") Long userId);
 
-    int updateUserInfo(@Param("userId") Long userId,@Param("userEmail") String userEmail, @Param("userImg")String userImg);
+    int updateUserInfo(@Param("userId") Long userId, @Param("userEmail") String userEmail, @Param("userImg") String userImg);
 }

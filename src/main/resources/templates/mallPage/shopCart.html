@@ -16,11 +16,12 @@
     <div class="site-nav w1200">
         <p class="sn-back-home">
             <i class="layui-icon layui-icon-home"></i>
-            <a href="#">首页</a>
+            <a th:href="@{/mall}">首页</a>
         </p>
         <div class="sn-quick-menu">
-            <div class="login"><a href="login.html">登录</a></div>
-            <div class="sp-cart"><a href="shopCart.html">购物车</a></div>
+            <div class="login" th:if="${session.user==null}"><a th:href="@{/mall/toLogin}">登录</a></div>
+            <div class="login" th:if="${session.user!=null}">[[${session.user.userName}]]</div>
+            <div class="sp-cart"><a th:href="@{/mall/toShopCart}">购物车</a></div>
         </div>
     </div>
 </div>
@@ -225,28 +226,11 @@
 
 <script type="text/javascript">
     layui.config({
-        base: '../res/static/js/util/' //你存放新模块的目录，注意，不是layui的模块目录
+        base: '/js/util/' //你存放新模块的目录，注意，不是layui的模块目录
     }).use(['mm', 'jquery', 'element', 'car'], function () {
         var mm = layui.mm, $ = layui.$, element = layui.element, car = layui.car;
 
-        // 模版导入数据
-        // var html = demo.innerHTML,
-        // listCont = document.getElementById('list-cont');
-        // mm.request({
-        //   url: '../json/shopcart.json',
-        //   success : function(res){
-        //     listCont.innerHTML = mm.renderHtml(html,res)
-        //     element.render();
-        //     car.init()
-        //   },
-        //   error: function(res){
-        //     console.log(res);
-        //   }
-        // })
-        //
         car.init();
-
-
     });
 </script>
 </body>

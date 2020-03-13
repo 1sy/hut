@@ -5,6 +5,18 @@
 
 <mapper namespace="com.sy.mapper.BookInfoMapper">
 
+    <select id="getNewBook" resultType="com.sy.pojo.BookInfo">
+        SELECT * FROM book_info WHERE book_status = 1 ORDER BY create_time DESC LIMIT 8
+    </select>
+
+    <select id="getSalesMax" resultType="com.sy.pojo.BookInfo">
+        SELECT * FROM book_info WHERE book_status =1 ORDER BY book_sales DESC,update_time DESC LIMIT 8
+    </select>
+
+    <select id="getStockMax" resultType="com.sy.pojo.BookInfo">
+        SELECT * FROM book_info WHERE book_status =1 ORDER BY book_stock DESC,update_time DESC LIMIT 3
+    </select>
+
     <select id="getAllCount" resultType="java.lang.Integer">
     select count(*) from book_info
     </select>
@@ -13,7 +25,7 @@
     select count(*) from book_info where book_name like #{bookName}
     </select>
 
-    <select id="getBookByPage" resultType="BookInfo">
+    <select id="getBookByPage" resultType="com.sy.pojo.BookInfo">
     select * from book_info where book_name like #{bookName} limit #{page},#{limit}
     </select>
 
@@ -33,9 +45,10 @@
         </foreach>
     </delete>
 
-    <select id="getBookById" resultType="BookInfo">
+    <select id="getBookById" resultType="com.sy.pojo.BookInfo">
         select * from book_info where book_id=#{bookId}
     </select>
+
 
     <update id="updateBook">
         update book_info set book_img= #{bookImg}, book_name= #{bookName}, book_price= #{bookPrice},book_stock= #{bookStock},book_author= #{bookAuthor}, book_press= #{bookPress}, book_introduce= #{bookIntroduce},book_status= #{bookStatus},category_type= #{categoryType} where book_id= #{bookId}
@@ -48,4 +61,15 @@
     <delete id="deleteBookById" parameterType="list">
         delete from book_info where book_id = #{bookId}
     </delete>
+
+    <select id="getBookByInfo" resultType="com.sy.pojo.BookInfo">
+        select * from book_info where book_name like #{bookInfo}
+    </select>
+
+    <select id="getBookByCategory" resultType="com.sy.pojo.BookInfo">
+        select * from book_info where category_type = #{categoryType} limit #{page},#{limit}
+    </select>
+    <select id="getCountByCategory" resultType="java.lang.Integer">
+        select count(*) from book_info where category_type = #{categoryType}
+    </select>
 </mapper>

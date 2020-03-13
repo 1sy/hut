@@ -16,32 +16,38 @@
     <div class="site-nav w1200">
         <p class="sn-back-home">
             <i class="layui-icon layui-icon-home"></i>
-            <a href="#">首页</a>
+            <a th:href="@{/mall}">首页</a>
         </p>
         <div class="sn-quick-menu">
-            <div class="login"><a href="login.html">登录</a></div>
-            <div class="sp-cart"><a href="shopCart.html">购物车</a></div>
+            <div class="login" th:if="${session.user==null}"><a th:href="@{/mall/toLogin}">登录</a></div>
+            <div class="login" th:if="${session.user!=null}">[[${session.user.userName}]]</div>
+            <div class="sp-cart">
+                <form name="shoppingCartForm" th:action="@{/mall/toShopCart}">
+                    <button type="button" id="toShoppingCart" style="font-size: 14px;border:0;cursor:pointer;">
+                        购物车
+                    </button>
+                </form>
+            </div>
         </div>
     </div>
 </div>
-
 
 <div class="header">
     <div class="headerLayout w1200">
         <div class="headerCon">
             <h1 class="mallLogo">
-                <a href="#" title="母婴商城">
+                <a href="#" title="HUT">
                     <img th:src="@{/images/mallImg/logo.png}">
                 </a>
             </h1>
+
             <div class="mallSearch">
-                <form action="" class="layui-form" novalidate>
-                    <input type="text" name="title" required lay-verify="required" autocomplete="off"
-                           class="layui-input" placeholder="请输入需要的商品">
+                <form th:action="@{/mall/search}" class="layui-form" novalidate>
+                    <input type="text" name="bookInfo" lay-verify="required" autocomplete="off"
+                           class="layui-input" value="" placeholder="请输入需要的教材">
                     <button class="layui-btn" lay-submit lay-filter="formDemo">
                         <i class="layui-icon layui-icon-search"></i>
                     </button>
-                    <input type="hidden" name="" value="">
                 </form>
             </div>
         </div>
@@ -50,46 +56,44 @@
 
 
 <div class="content content-nav-base datails-content">
+    <br>
     <div class="main-nav">
         <div class="inner-cont0">
         </div>
     </div>
     <div class="data-cont-wrap w1200">
-        <div class="crumb">
-            <a href="javascript:;">首页</a>
-            <span>></span>
-            <a href="javascript:;">所有商品</a>
-            <span>></span>
-            <a href="javascript:;">产品详情</a>
-        </div>
+        <br><br>
         <div class="product-intro layui-clear">
             <div class="preview-wrap">
-                <a href="javascript:;"><img src="../res/static/img/details_img1.jpg"></a>
+                <img th:src="@{${book.bookImg}}" width="400px" height="380px">
             </div>
             <div class="itemInfo-wrap">
                 <div class="itemInfo">
                     <div class="title">
-                        <h4>男女宝宝秋冬装套装0一1岁婴儿衣服潮加厚连体衣保暖冬季外出抱衣 </h4>
+                        <h4>[[${book.bookIntroduce}]]</h4>
                     </div>
                     <div class="summary">
-                        <p class="reference"><span>参考价</span>
-                            <del>￥280.00</del>
+                        <p class="address-box"><span>教材名</span><span
+                                style="font-size: 18px; color: #1b1d21  ">[[${book.bookName}]]</span>
                         </p>
-                        <p class="activity"><span>活动价</span><strong class="price"><i>￥</i>99.00</strong></p>
-                        <p class="address-box"><span>送&nbsp;&nbsp;&nbsp;&nbsp;至</span><strong class="address">江西&nbsp;&nbsp;南昌&nbsp;&nbsp;东湖区</strong>
+                        <p class="address-box"><span>作&nbsp;&nbsp;&nbsp;&nbsp;者</span><span style="font-size: 12px;">[[${book.bookAuthor}]]</span>
                         </p>
+                        <p class="activity"><span>售&nbsp;&nbsp;&nbsp;&nbsp;价</span><strong class="price"><i>￥</i>[[${book.bookPrice}]]</strong>
+                        </p>
+
                     </div>
                     <div class="choose-attrs">
-                        <div class="color layui-clear"><span class="title">颜&nbsp;&nbsp;&nbsp;&nbsp;色</span>
-                            <div class="color-cont"><span class="btn">白色</span> <span class="btn active">粉丝</span></div>
-                        </div>
                         <div class="number layui-clear"><span class="title">数&nbsp;&nbsp;&nbsp;&nbsp;量</span>
-                            <div class="number-cont"><span class="cut btn">-</span><input
-                                    onkeyup="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}"
-                                    onafterpaste="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}"
-                                    maxlength="4" type="" name="" value="1"><span class="add btn">+</span></div>
+                            <div class="number-cont">
+                                <span class="cut btn">-</span>
+                                <input onkeyup="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}"
+                                       onafterpaste="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}"
+                                       maxlength="4" type="" name="" value="1">
+                                <span class="add btn">+</span>
+                            </div>
                         </div>
                     </div>
+                    <br>
                     <div class="choose-btns">
                         <button class="layui-btn layui-btn-primary purchase-btn">立刻购买</button>
                         <button class="layui-btn  layui-btn-danger car-btn"><i
@@ -99,66 +103,83 @@
                 </div>
             </div>
         </div>
-        <div class="layui-clear">
-            <div class="aside">
-                <h4>热销推荐</h4>
-                <div class="item-list">
-                    <div class="item">
-                        <img src="../res/static/img/details_img2.jpg">
-                        <p><span>可爱宝宝粉色连体秋裤</span><span class="pric">￥99.00</span></p>
-                    </div>
-                    <div class="item">
-                        <img src="../res/static/img/details_img2.jpg">
-                        <p><span>可爱宝宝粉色连体秋裤</span><span class="pric">￥99.00</span></p>
-                    </div>
-                    <div class="item">
-                        <img src="../res/static/img/details_img2.jpg">
-                        <p><span>可爱宝宝粉色连体秋裤</span><span class="pric">￥99.00</span></p>
-                    </div>
-                    <div class="item">
-                        <img src="../res/static/img/details_img2.jpg">
-                        <p><span>可爱宝宝粉色连体秋裤</span><span class="pric">￥99.00</span></p>
-                    </div>
-                    <div class="item">
-                        <img src="../res/static/img/details_img2.jpg">
-                        <p><span>可爱宝宝粉色连体秋裤</span><span class="pric">￥99.00</span></p>
-                    </div>
-                    <div class="item">
-                        <img src="../res/static/img/details_img2.jpg">
-                        <p><span>可爱宝宝粉色连体秋裤</span><span class="pric">￥99.00</span></p>
-                    </div>
-                </div>
+        <!--        layui-field-title-->
+        <fieldset class="layui-elem-field layui-field-title" style="margin-top: 50px;">
+            <legend><h4 style="color: #888888">教材详情</h4></legend>
+            <div class="layui-field-box">
+                <table class="layui-table" lay-skin="nob" lay-size="lg">
+                    <colgroup>
+                        <col width="150">
+                        <col width="150">
+                        <col width="200">
+                        <col>
+                    </colgroup>
+                    <tbody>
+                    <tr>
+                        <td>教材名称：[[${book.bookName}]]</td>
+                        <td>价格：￥[[${book.bookPrice}]]</td>
+                        <td>库存：[[${book.bookStock}]]</td>
+                    </tr>
+                    <tr>
+                        <td>作者：[[${book.bookAuthor}]]</td>
+                        <td>出版社：[[${book.bookPress}]]</td>
+                    </tr>
+                    <tr>
+                        <td colspan="3" rowspan="2">简介：[[${book.bookIntroduce}]]</td>
+                    </tr>
+                    </tbody>
+                </table>
             </div>
-            <div class="detail">
-                <h4>详情</h4>
-                <div class="item">
-                    <img src="../res/static/img/details_imgbig.jpg">
-                </div>
-            </div>
-        </div>
+        </fieldset>
+
+
     </div>
 </div>
+</div>
+<input id="stock" hidden th:value="${book.bookStock}"/>
 <script type="text/javascript">
     layui.config({
-        base: '../res/static/js/util/' //你存放新模块的目录，注意，不是layui的模块目录
-    }).use(['mm', 'jquery'], function () {
-        var mm = layui.mm, $ = layui.$;
-        var cur = $('.number-cont input').val();
+        base: '/js/util/' //你存放新模块的目录，注意，不是layui的模块目录
+    }).use(['mm', 'jquery', 'layer'], function () {
+        var mm = layui.mm, $ = layui.$, layer = layui.layer;
         $('.number-cont .btn').on('click', function () {
             if ($(this).hasClass('add')) {
-                cur++;
+                var cur = $('.number-cont input').val();
+                if (cur < $('#stock').val()) {
+                    cur++;
+                    $('.number-cont input').val(cur);
+                }
 
             } else {
+                var cur = $('.number-cont input').val();
                 if (cur > 1) {
                     cur--;
+                    $('.number-cont input').val(cur);
                 }
             }
-            $('.number-cont input').val(cur)
-        })
+
+        });
+
+        $('#toShoppingCart').on('click', function () {
+            var userId = $('.userId').text();
+            if (userId == '') {   //为空代表没有登陆 这时候只需要提交表单 shiro会自动拦截
+                $("form[name='shoppingCartForm']").submit();
+            } else {
+                $.post("/checkShoppingCart", {"userId": userId}, function (result) {
+                    if (result == 0) {
+                        layer.tips("购物车为空", "#toShoppingCart", {
+                            tips: [3, '#000000'] //配置气泡位置和颜色
+                        });
+                    } else {
+                        $("form[name='shoppingCartForm']").submit();
+                    }
+                });
+            }
+
+        });
+
 
     });
 </script>
-
-
 </body>
 </html>

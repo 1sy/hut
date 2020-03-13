@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/main.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/lib/layui-v2.5.4/css/layui.css}">
+    <script th:src="@{/lib/layui-v2.5.4/layui.js}" charset="utf-8"></script>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+</head>
+<body>
+<div class="site-nav-bg">
+    <div class="site-nav w1200">
+        <div class="sn-quick-menu">
+        </div>
+    </div>
+</div>
+<div class="header">
+    <div class="headerLayout w1200">
+        <div class="headerCon">
+            <h1 class="mallLogo">
+                <img th:src="@{/images/mallImg/logo.png}">
+            </h1>
+        </div>
+    </div>
+</div>
+
+
+<div class="content content-nav-base  login-content">
+    <div class="main-nav">
+        <div class="inner-cont0">
+            <div class="inner-cont1 w1200">
+
+            </div>
+        </div>
+    </div>
+    <div class="login-bg" th:style="'background:url(' + @{/images/mallImg/bg.jpg} + ')'">
+        <div class="login-cont w1200">
+            <div class="form-box">
+                <form class="layui-form" th:action="@{/mall/login}" method="post">
+                    <legend>登录</legend>
+                    <div class="layui-form-item">
+                        <p style="color:red" align="center">[[${msg}]]</p>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-inline iphone">
+                            <div class="layui-input-inline">
+                                <i class="layui-icon layui-icon-username iphone-icon"></i>
+                                <input type="text" name="userName" id="userName" lay-verify="required" placeholder="用户名"
+                                       autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline iphone">
+                            <div class="layui-input-inline">
+                                <i class="layui-icon layui-icon-password iphone-icon"></i>
+                                <input type="password" name="userPassword" id="userPassword" lay-verify="required"
+                                       placeholder="密码" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item login-btn">
+                        <div class="layui-input-block">
+                            <button type="submit" class="layui-btn" lay-submit="">登录
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    layui.use(['jquery', 'form'], function () {
+        var $ = layui.$,
+            form = layui.form;
+    })
+</script>
+
+</body>
+</html>

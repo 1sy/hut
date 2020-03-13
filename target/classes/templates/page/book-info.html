@@ -53,6 +53,7 @@
         //表格渲染
         var mainTable = table.render({
             elem: '#test',
+            id: 'table',
             url: '/getAllBook?bookName=' + bookName,
             toolbar: '#toolbarDemo', //开启头部工具栏，并为其绑定左侧模板
             cellMinWidth: 60,
@@ -151,6 +152,14 @@
             });
             $('td img').attr('style', 'max-width:70px');
         }
+
+        //监听排序事件，  reload才能使得done 生效
+        table.on('sort(test)', function (obj) {
+            table.reload('table', {
+                initSort: obj
+            });
+        });
+
 
         //监听上架、下架操作    搜索之后该功能失效 之后要在reload重新添加
         function changeBookStatus() {
