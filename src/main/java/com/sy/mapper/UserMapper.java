@@ -5,6 +5,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Mapper
@@ -17,5 +18,9 @@ public interface UserMapper {
 
     User getUserById(@Param("userId") Long userId);
 
-    int updateUserInfo(@Param("userId") Long userId, @Param("userEmail") String userEmail, @Param("userImg") String userImg);
+    Integer updateUserInfo(@Param("userId") Long userId, @Param("userEmail") String userEmail, @Param("userImg") String userImg);
+
+    BigDecimal getUserBalance(@Param("userId") Long userId);
+
+    Integer payOrder(@Param("userId") Long userId, @Param("userBalance") BigDecimal userBalance);
 }

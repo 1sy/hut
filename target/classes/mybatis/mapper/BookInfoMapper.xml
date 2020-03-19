@@ -72,4 +72,11 @@
     <select id="getCountByCategory" resultType="java.lang.Integer">
         select count(*) from book_info where category_type = #{categoryType}
     </select>
+    <select id="getShoppingItemVOById" resultType="com.sy.pojo.vo.ShoppingItemVO">
+        select book_id,book_img,book_name,book_author,book_price,book_stock,book_status  from book_info where book_id=#{bookId}
+    </select>
+    <select id="getOrderCheckDTOById" resultType="com.sy.pojo.dto.OrderCheckDTO">
+        select book_id,book_name,book_price  from book_info where book_id=#{bookId}
+    </select>
+
 </mapper>

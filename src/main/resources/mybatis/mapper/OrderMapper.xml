@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sy.mapper.OrderMapper">
+
+
+    <insert id="addOrder">
+        insert into `order` (order_id, user_id, order_amount, order_status) values (#{orderId},#{userId},#{orderAmount},#{orderStatus})
+    </insert>
+
+    <insert id="addOrderItem">
+        insert into order_item (order_id, book_id, buy_number) values (#{orderId},#{bookId},#{buyNumber})
+    </insert>
+    <insert id="addOrderAddress">
+        insert into order_address (order_id, addressee_name, addressee_telephone, addressee_address) values (#{orderId},#{addresseeName},#{addresseeTelephone},#{addresseeAddress})
+    </insert>
+</mapper>

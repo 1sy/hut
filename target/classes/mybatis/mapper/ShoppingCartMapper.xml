@@ -4,9 +4,37 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.sy.mapper.ShoppingCartMapper">
+
+
     <select id="getShoppingCartById" resultType="com.sy.pojo.ShoppingCart">
         select * from shopping_cart where user_id= #{userId}
     </select>
 
 
+    <delete id="deleteShoppingCartItem">
+        delete from shopping_cart where user_id=#{userId} and book_id=#{bookId}
+    </delete>
+
+    <delete id="multipleDelete" parameterType="list">
+        delete from shopping_cart where user_id=#{userId} and book_id in
+        <foreach collection="bookIdList" index="index" item="bookId" open="(" separator="," close=")">
+            #{bookId}
+        </foreach>
+    </delete>
+
+
+    <update id="updateShoppingCartItem">
+        update shopping_cart set buy_number = #{buyNumber} where user_id=#{userId} and book_id=#{bookId}
+    </update>
+
+    <insert id="addShoppingCartItem">
+        insert into shopping_cart  (user_id,book_id,buy_number) values (#{userId},#{bookId},#{buyNumber})
+    </insert>
+
+    <select id="getBuyNumberById" resultType="java.lang.Integer">
+        select buy_number from shopping_cart where user_id=#{userId} and book_id=#{bookId}
+    </select>
+    <select id="getShoppingCartItemCountById" resultType="java.lang.Integer">
+        select count(*) from shopping_cart where user_id=#{userId}
+    </select>
 </mapper>

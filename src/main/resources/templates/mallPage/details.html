@@ -6,6 +6,7 @@
     <link rel="stylesheet" type="text/css" th:href="@{/css/main.css}">
     <link rel="stylesheet" type="text/css" th:href="@{/lib/layui-v2.5.4/css/layui.css}">
     <script th:src="@{/lib/layui-v2.5.4/layui.js}" charset="utf-8"></script>
+    <script th:src="@{/js/util/form.js}" charset="utf-8"></script>
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
@@ -21,8 +22,10 @@
         <div class="sn-quick-menu">
             <div class="login" th:if="${session.user==null}"><a th:href="@{/mall/toLogin}">登录</a></div>
             <div class="login" th:if="${session.user!=null}">[[${session.user.userName}]]</div>
+
             <div class="sp-cart">
-                <form name="shoppingCartForm" th:action="@{/mall/toShopCart}">
+                <form name="shoppingCartForm" th:action="@{/mall/toShoppingCart}" method="post">
+                    <input name="userId" class="inputUserId" value="" hidden>
                     <button type="button" id="toShoppingCart" style="font-size: 14px;border:0;cursor:pointer;">
                         购物车
                     </button>
@@ -88,15 +91,15 @@
                                 <span class="cut btn">-</span>
                                 <input onkeyup="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}"
                                        onafterpaste="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}"
-                                       maxlength="4" type="" name="" value="1">
+                                       maxlength="4" type="" name="" id="buyNumber" value="1">
                                 <span class="add btn">+</span>
                             </div>
                         </div>
                     </div>
                     <br>
                     <div class="choose-btns">
-                        <button class="layui-btn layui-btn-primary purchase-btn">立刻购买</button>
-                        <button class="layui-btn  layui-btn-danger car-btn"><i
+                        <button type="button" id="buyNow" class="layui-btn layui-btn-primary purchase-btn">立刻购买</button>
+                        <button type="button" id="addShoppingCart" class="layui-btn  layui-btn-danger car-btn"><i
                                 class="layui-icon layui-icon-cart-simple"></i>加入购物车
                         </button>
                     </div>
@@ -137,11 +140,15 @@
 </div>
 </div>
 <input id="stock" hidden th:value="${book.bookStock}"/>
-<script type="text/javascript">
+<div hidden class="userId" th:if="${session.user==null}"></div>
+<div hidden class="userId" th:if="${session.user!=null}">[[${session.user.userId}]]</div>
+<script th:inline="javascript">
     layui.config({
         base: '/js/util/' //你存放新模块的目录，注意，不是layui的模块目录
     }).use(['mm', 'jquery', 'layer'], function () {
         var mm = layui.mm, $ = layui.$, layer = layui.layer;
+        var userId = $('.userId').text();
+        //这个地方有个问题  库存要详细比对   购物车有的话 就得算上购物车的再决定库存  也可以在购物车里面做个事件  大于就写成最大
         $('.number-cont .btn').on('click', function () {
             if ($(this).hasClass('add')) {
                 var cur = $('.number-cont input').val();
@@ -165,12 +172,13 @@
             if (userId == '') {   //为空代表没有登陆 这时候只需要提交表单 shiro会自动拦截
                 $("form[name='shoppingCartForm']").submit();
             } else {
-                $.post("/checkShoppingCart", {"userId": userId}, function (result) {
+                $.post("/mall/checkShoppingCart", {"userId": userId}, function (result) {
                     if (result == 0) {
                         layer.tips("购物车为空", "#toShoppingCart", {
                             tips: [3, '#000000'] //配置气泡位置和颜色
                         });
                     } else {
+                        $(".inputUserId").val(userId);
                         $("form[name='shoppingCartForm']").submit();
                     }
                 });
@@ -178,7 +186,40 @@
 
         });
 
+        $('#buyNow').on('click', function () {
+            var bookId = [[${book.bookId}]];
+            var buyNumber = $('#buyNumber').val();
+            var bookPrice = [[${book.bookPrice}]];
+            var bookName = [[${book.bookName}]];
+            post("/mall/toBuyNow ", {
+                "bookId": bookId,
+                "buyNumber": buyNumber,
+                "bookPrice": bookPrice,
+                "bookName": bookName
+            });
+        })
 
+        $('#addShoppingCart').on('click', function () {
+            if (userId == '') {   //为空代表没有登陆 这时候只需要提交表单 shiro会自动拦截
+                $("form[name='shoppingCartForm']").submit();
+            } else {
+                var bookId = [[${book.bookId}]];
+                var buyNumber = $('#buyNumber').val();
+                $.post("/mall/toAddShoppingCartItem", {
+                    "userId": userId,
+                    "bookId": bookId,
+                    "buyNumber": buyNumber
+                }, function (result) {
+                    if (result == 1) {
+                        layer.msg("添加成功");
+                    } else if (result == 0) {
+                        layer.msg("添加失败");
+                    } else if (result == 5) {
+                        layer.msg("购物车已满")
+                    }
+                });
+            }
+        })
     });
 </script>
 </body>

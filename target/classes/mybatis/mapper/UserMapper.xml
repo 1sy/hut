@@ -10,15 +10,22 @@
     </select>
 
     <select id="getUserByUsername" parameterType="java.lang.String" resultType="com.sy.pojo.User">
-    select * from user u where user_name=#{userName}
+    select * from user where user_name=#{userName}
     </select>
 
     <select id="getUserById" parameterType="java.lang.Long" resultType="com.sy.pojo.User">
-        select * from user u where user_id=#{userId}
+        select * from user where user_id=#{userId}
     </select>
+
 
     <update id="updateUserInfo" parameterType="com.sy.pojo.User">
         update user set user_email=#{userEmail},user_img=#{userImg} where  user_id=#{userId}
     </update>
+    <update id="payOrder">
+        update user set user_balance=#{userBalance} where  user_id=#{userId}
+    </update>
 
+    <select id="getUserBalance" resultType="java.math.BigDecimal">
+        select user_balance  from user where user_id=#{userId}
+    </select>
 </mapper>

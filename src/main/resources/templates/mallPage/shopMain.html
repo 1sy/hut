@@ -31,7 +31,8 @@
             <div class="login" th:if="${session.user==null}"><a th:href="@{/mall/toLogin}">登录</a></div>
             <div class="login" th:if="${session.user!=null}">[[${session.user.userName}]]</div>
             <div class="sp-cart">
-                <form name="shoppingCartForm" th:action="@{/mall/toShopCart}">
+                <form name="shoppingCartForm" th:action="@{/mall/toShoppingCart}" method="post">
+                    <input name="userId" class="inputUserId" value="" hidden>
                     <button type="button" id="toShoppingCart" style="font-size: 14px;border:0;cursor:pointer;">
                         购物车
                     </button>
@@ -52,7 +53,7 @@
 
             <div class="mallSearch">
                 <form th:action="@{/mall/search}" class="layui-form" novalidate>
-                    <input type="text" name="bookInfo"  lay-verify="required" autocomplete="off"
+                    <input type="text" name="bookInfo" lay-verify="required" autocomplete="off"
                            class="layui-input" value="" placeholder="请输入需要的教材">
                     <button class="layui-btn" lay-submit lay-filter="formDemo">
                         <i class="layui-icon layui-icon-search"></i>
@@ -178,12 +179,13 @@
                 if (userId == '') {   //为空代表没有登陆 这时候只需要提交表单 shiro会自动拦截
                     $("form[name='shoppingCartForm']").submit();
                 } else {
-                    $.post("/checkShoppingCart", {"userId": userId}, function (result) {
+                    $.post("/mall/checkShoppingCart", {"userId": userId}, function (result) {
                         if (result == 0) {
                             layer.tips("购物车为空", "#toShoppingCart", {
                                 tips: [3, '#000000'] //配置气泡位置和颜色
                             });
                         } else {
+                            $(".inputUserId").val(userId);
                             $("form[name='shoppingCartForm']").submit();
                         }
                     });

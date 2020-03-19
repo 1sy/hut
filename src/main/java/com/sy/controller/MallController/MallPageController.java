@@ -5,7 +5,6 @@ import com.alibaba.fastjson.JSONArray;
 import com.sy.mapper.BookInfoMapper;
 import com.sy.mapper.ShoppingCartMapper;
 import com.sy.pojo.BookInfo;
-import com.sy.pojo.ShoppingCart;
 import com.sy.pojo.User;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
@@ -112,12 +111,7 @@ public class MallPageController {
     }
 
 
-    @RequestMapping("/mall/toShopCart")
-    public String toShopCart(@RequestParam("userId") Long userId, Model model) {
-        List<ShoppingCart> shoppingCart = shoppingCartMapper.getShoppingCartById(userId);
-        model.addAttribute("shoppingCart", shoppingCart);
-        return "mallPage/shopCart";
-    }
+
 
 
 }

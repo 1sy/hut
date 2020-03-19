@@ -36,7 +36,7 @@ public class PageController {
 
     @RequestMapping("/index")
     public String toIndex(
-            @RequestParam(value = "userId", defaultValue = "0") String userId,
+            @RequestParam("userId") String userId,
             Model model) {
         User user = userMapper.getUserById(Long.parseLong(userId));
         model.addAttribute("user", user);

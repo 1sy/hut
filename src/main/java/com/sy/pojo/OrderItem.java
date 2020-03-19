@@ -1,13 +1,14 @@
-package com.sy.pojo.vo;
+package com.sy.pojo;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
-public class ShoppingCartVO {
-    private ShoppingItemVO shoppingItem;
+@AllArgsConstructor
+public class OrderItem {
+    private String orderId;
+    private String bookId;
     private Integer buyNumber;
 }

@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/main.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/js/step/step.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/lib/layui-v2.5.4/css/layui.css}">
+    <script th:src="@{/js/step/step.js}" charset="utf-8"></script>
+    <script th:src="@{/lib/layui-v2.5.4/layui.js}" charset="utf-8"></script>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+</head>
+<body>
+
+<div class="site-nav-bg">
+    <div class="site-nav w1200">
+        <p class="sn-back-home">
+            <i class="layui-icon layui-icon-home"></i>
+            <a th:href="@{/mall}">首页</a>
+        </p>
+        <div class="sn-quick-menu">
+            <div class="login" th:if="${session.user!=null}">[[${session.user.userName}]]</div>
+            <div class="sp-cart">
+                <form name="shoppingCartForm" th:action="@{/mall/toShoppingCart}" method="post">
+                    <input name="userId" class="inputUserId" value="" hidden>
+                    <button type="button" id="toShoppingCart" style="font-size: 14px;border:0;cursor:pointer;">
+                        购物车
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="content content-nav-base datails-content">
+    <br><br><br>
+
+    <div class="layui-fluid">
+        <div class="layui-card">
+            <div class="layui-card-body" style="padding-top: 40px;">
+                <div class="layui-carousel" id="stepForm" lay-filter="stepForm" style="margin: 0 auto;">
+                    <div carousel-item>
+
+                        <div>
+                            <form class="layui-form" style="margin: 0 auto;max-width:580px;padding-top: 40px;">
+                                <div class="layui-form-item layui-field-box" align="center">
+                                    <table class="layui-table" align="left" style="text-align: center;">
+                                        <colgroup>
+                                            <col width="355px">
+                                            <col width="115px">
+                                            <col width="115px">
+                                        </colgroup>
+                                        <thead>
+                                        <td>教材名称</td>
+                                        <td>单&nbsp;&nbsp;&nbsp;&nbsp;价</td>
+                                        <td>数&nbsp;&nbsp;&nbsp;&nbsp;量</td>
+                                        </thead>
+                                        <tbody>
+                                        <tr th:each="item:${orderCheckDTOList}">
+                                            <td>[[${item.bookName}]]</td>
+                                            <td>￥[[${item.bookPrice}]]</td>
+                                            <td>[[${item.buyNumber}]]</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3" rowspan="2">
+                                                <span style="font-size: 16px;color: #333;">总&nbsp;&nbsp;&nbsp;&nbsp;价：[[${totalPrice}]] 元</span>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                    <div class="layui-form-item">
+                                        <br/>
+                                        <button class="layui-btn" type="button" lay-submit lay-filter="formStep">
+                                            &emsp;下一步&emsp;
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div>
+                            <form id="addressFrom" class="layui-form"
+                                  style="margin: 0 auto;max-width: 460px;padding-top: 40px;"
+                                  th:action="@{/mall/toAddOrderAddress}" method="post">
+                                <input hidden th:value="${orderId}"/>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">收货人:</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" id="addresseeName" placeholder="请填写收货人姓名"
+                                               class="layui-input"
+                                               lay-verify="required"/>
+
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">联系方式:</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" placeholder="请填写联系方式" id="addresseeTelephone"
+                                               class="layui-input"
+                                               lay-verify="phone">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">收货地址:</label>
+                                    <div class="layui-input-block">
+                                    <textarea placeholder="请填写收货地址" id="addresseeAddress" lay-verify="required"
+                                              class="layui-textarea"></textarea>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <div class="layui-input-block">
+                                        <button type="button" class="layui-btn layui-btn-primary pre">上一步</button>
+                                        <button type="button" class="layui-btn" lay-submit lay-filter="formStep">
+                                            &emsp;下一步&emsp;
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+
+
+                        <div>
+                            <form id="orderFrom" class="layui-form"
+                                  style="margin: 0 auto;max-width: 460px;padding-top: 40px;"
+                                  th:action="@{/mall/toAddOrder}" method="post">
+                                <br/> <input name="userId" th:value="${session.user.userId}" hidden>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">订单编号:</label>
+                                    <div class="layui-input-block">
+                                        <div class="layui-form-mid layui-word-aux">[[${orderId}]]</div>
+                                    </div>
+                                    <input name="orderId" th:value="${orderId}" hidden>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">支付方式:</label>
+                                    <div class="layui-form-mid layui-word-aux">
+                                        <span>余额</span>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">总价:</label>
+                                    <div class="layui-input-block">
+                                        <div class="layui-form-mid layui-word-aux">
+                                            <span style="font-size: 18px;color: #333;">[[${totalPrice}]] 元</span>
+                                            <input name="orderId" th:value="${totalPrice}" hidden>
+                                        </div>
+                                    </div>
+                                </div>
+                                <br/>
+                                <div class="layui-form-item">
+                                    <div class="layui-input-block">
+                                        <button type="button" class="layui-btn layui-btn-primary pre">上一步</button>
+                                        <button type="button" class="layui-btn" lay-submit lay-filter="payButton">
+                                            &emsp;确认支付&emsp;
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+
+
+                        <div>
+                            <div style="text-align: center;margin-top: 90px;">
+                                <i class="layui-icon layui-circle"
+                                   style="color: white;font-size:30px;font-weight:bold;background: #52C41A;padding: 20px;line-height: 80px;">&#xe605;</i>
+                                <div style="font-size: 24px;color: #333;font-weight: 500;margin-top: 30px;">
+                                    下单成功
+                                </div>
+                                <!-- <div style="font-size: 14px;color: #666;margin-top: 20px;">预计两小时到账</div> -->
+                            </div>
+                            <div style="text-align: center;margin-top: 50px;">
+                                <button class="layui-btn layui-btn-primary" lay-submit lay-filter="returnIndex">返回首页
+                                </button>
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<div hidden class="userId" th:if="${session.user==null}"></div>
+<div hidden class="userId" th:if="${session.user!=null}">[[${session.user.userId}]]</div>
+<script th:inline="javascript">
+    layui.config({
+        base: '/js/step/'
+    }).use(['form', 'step'], function () {
+        var $ = layui.$
+            , form = layui.form
+            , step = layui.step;
+
+        step.render({
+            elem: '#stepForm',
+            filter: 'stepForm',
+            width: '100%', //设置容器宽度
+            stepWidth: '750px',
+            height: '500px',
+            stepItems: [{
+                title: '确认教材信息'
+            }, {
+                title: '输入收货人信息'
+            }, {
+                title: '支付'
+            }, {
+                title: '完成'
+            }]
+        });
+
+
+        form.on('submit(formStep)', function (data) {
+            step.next('#stepForm');
+            return false;
+        });
+
+        form.on('submit(payButton)', function (data) {
+            //判断余额是否充足，充足就将数据写入数据库并跳转到下个表单  否则回到首页
+            var totalPrice = [[${totalPrice}]];
+            var userId = [[${session.user.userId}]];
+            var orderId = [[${orderId}]];
+            var orderCheckDTOList = [[${orderCheckDTOList}]];
+            var addresseeName = $('#addresseeName').val();
+            var addresseeTelephone = $('#addresseeTelephone').val();
+            var addresseeAddress = $('#addresseeAddress').val();
+            var bookIdList = [[${bookIdList}]];
+            $.post("/mall/toCheckUserBalance", {"totalPrice": totalPrice, "userId": userId}, function (result) {
+                if (result == 1) { //代表 余额充足
+
+                    //这个地方分三个表单提交    首先 订单表  需要事务
+                    $.post("/mall/toAddOrder", {"orderId": orderId, "userId": userId, "orderAmount": totalPrice}
+                        , function (result) {
+                            if (result != 1) {
+                                layer.msg("添加订单失败");
+                            }
+                        });
+
+                    //第二个  订单项
+                    $.post("/mall/toAddOrderItem", {"buyList": [[${buyList}]], "orderId": orderId}
+                        , function (result) {
+                            if (result != 1) {
+                                layer.msg("添加订单项失败");
+                            }
+                        });
+                    //第三个  订单地址
+                    $.post("/mall/toAddOrderAddress", {
+                            "orderId": orderId,
+                            "addresseeName": addresseeName,
+                            "addresseeTelephone": addresseeTelephone,
+                            "addresseeAddress": addresseeAddress
+                        }
+                        , function (result) {
+                            if (result != 1) {
+                                layer.msg("添加订单项失败");
+                            }
+                        });
+
+                    //最后删除购物车项
+                    $.post("/mall/toDeleteOrderItem", {"bookIdList": JSON.stringify(bookIdList), "userId": userId},
+                        function (result) {
+                            if (result != 1) {
+                                layer.msg("购物车项删除失败");
+                            }
+                        });
+                    //下单成功后 如果是购物车操作 购物车要删除
+                } else {
+                    layer.msg("余额不足，下单失败");
+                }
+            });
+
+            step.next('#stepForm');
+            return false;
+        });
+
+        form.on('submit(returnIndex)', function () {
+            location.href = "/mall";
+            return false;
+        });
+
+        $('.pre').click(function () {
+            step.pre('#stepForm');
+        });
+
+        $('.next').click(function () {
+            step.next('#stepForm');
+        });
+
+        $('#toShoppingCart').on('click', function () {
+            var userId = $('.userId').text();
+            if (userId == '') {   //为空代表没有登陆 这时候只需要提交表单 shiro会自动拦截
+                $("form[name='shoppingCartForm']").submit();
+            } else {
+                $.post("/mall/checkShoppingCart", {"userId": userId}, function (result) {
+                    if (result == 0) {
+                        layer.tips("购物车为空", "#toShoppingCart", {
+                            tips: [3, '#000000'] //配置气泡位置和颜色
+                        });
+                    } else {
+                        $(".inputUserId").val(userId);
+                        $("form[name='shoppingCartForm']").submit();
+                    }
+                });
+            }
+
+        });
+    })
+</script>
+</body>
+</html>
