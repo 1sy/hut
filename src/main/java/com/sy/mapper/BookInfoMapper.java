@@ -57,4 +57,9 @@ public interface BookInfoMapper {
     List<BookInfo> getBookByCategory(@Param("page") Integer page, @Param("limit") Integer limit, @Param("categoryType") Integer categoryType);
 
     Integer getCountByCategory(@Param("categoryType") Integer categoryType);
+
+    Integer getBookStock(@Param("bookId")String bookId);
+
+
+    Integer updateBookStock(@Param("bookId")String bookId, @Param("bookStock")Integer bookStock);
 }

@@ -1,9 +1,11 @@
 package com.sy.controller.MallController;
 
 import com.alibaba.fastjson.JSONArray;
+import com.sy.mapper.BookInfoMapper;
 import com.sy.mapper.OrderMapper;
 import com.sy.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Set;
 
 @Controller
 public class OrderController {
@@ -18,6 +21,10 @@ public class OrderController {
     UserMapper userMapper;
     @Autowired
     OrderMapper orderMapper;
+    @Autowired
+    BookInfoMapper bookInfoMapper;
+    @Autowired
+    RedisTemplate<String, String> redisTemplate;
 
     @ResponseBody
     @PostMapping("/mall/toCheckUserBalance")
@@ -45,8 +52,16 @@ public class OrderController {
             if (buyItem != null) {
                 String[] split = buyItem.split("-", 2);
                 String bookId = split[0];
-                String buyNumber = split[1];
+                String buyNumber = split[1];  //这个地方 加入订单项，   改变教材现有库存
                 orderMapper.addOrderItem(orderId, bookId, Integer.parseInt(buyNumber));
+                Integer bookStock = bookInfoMapper.getBookStock(bookId);
+                bookInfoMapper.updateBookStock(bookId, bookStock - Integer.parseInt(buyNumber));
+                //修改教材内容后要清下redis缓存
+                Set<String> keys = redisTemplate.keys("*" + bookId + "*");
+                Set<String> listkeys = redisTemplate.keys("*List");
+                redisTemplate.delete(keys);
+                redisTemplate.delete(listkeys);
+                redisTemplate.opsForHash().delete("book", bookId);
             }
         }
         return 1;

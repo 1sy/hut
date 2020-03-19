@@ -95,8 +95,12 @@
                                     <span class="ciur-pic" style="color: #c30;">￥[[${book.bookPrice}]]</span>
                                     <span class="Ori-pic"
                                           style="color: #aaa;">&nbsp;&nbsp;库存：[[${book.bookStock}]]</span>
-                                    <span class="discount" style="width: 50px;"><i
-                                            class="layui-icon layui-icon-cart"></i></span>
+                                    <span class="discount" style="width: 50px;">
+                                        <button type="button" class="addShoppingCart" th:name="${book.bookId}"
+                                                style="background-color: #cfb2f6 ;width: 50px;height: 26px; border: 0px;cursor:pointer;">
+                                            <i class="layui-icon layui-icon-cart" style="color: honeydew"></i>
+                                        </button>
+                                    </span>
                                 </p>
                             </div>
                         </div>
@@ -117,8 +121,12 @@
                                     <span class="ciur-pic" style="color: #c30;">￥[[${book.bookPrice}]]</span>
                                     <span class="Ori-pic"
                                           style="color: #aaa;">&nbsp;&nbsp;库存：[[${book.bookStock}]]</span>
-                                    <span class="discount" style="width: 50px;"><i
-                                            class="layui-icon layui-icon-cart"></i></span>
+                                    <span class="discount" style="width: 50px;">
+                                        <button type="button" class="addShoppingCart" th:name="${book.bookId}"
+                                                style="background-color: #cfb2f6 ;width: 50px;height: 26px; border: 0px ;cursor: pointer ;"><i
+                                                class="layui-icon layui-icon-cart" style="color: honeydew"></i>
+                                        </button>
+                                    </span>
                                 </p>
                             </div>
                         </div>
@@ -192,6 +200,28 @@
                 }
 
             });
+
+            $('.addShoppingCart').on('click', function () {
+                var userId = $('.userId').text();
+                if (userId == '') {   //为空代表没有登陆 这时候只需要提交表单 shiro会自动拦截
+                    $("form[name='shoppingCartForm']").submit();
+                } else {
+                    var bookId = $(this).attr('name');
+                    $.post("/mall/toAddShoppingCartItem", {
+                        "userId": userId,
+                        "bookId": bookId,
+                        "buyNumber": 1
+                    }, function (result) {
+                        if (result == 1) {
+                            layer.msg("添加成功");
+                        } else if (result == 0) {
+                            layer.msg("添加失败");
+                        } else if (result == 5) {
+                            layer.msg("购物车已满")
+                        }
+                    });
+                }
+            })
 
         });
 

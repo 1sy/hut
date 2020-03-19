@@ -16,6 +16,8 @@ public interface OrderMapper {
     Integer addOrderItem(@Param("orderId") String orderId, @Param("bookId") String bookId, @Param("buyNumber") Integer buyNumber);
 
     Integer addOrderAddress(@Param("orderId") String orderId, @Param("addresseeName") String addresseeName, @Param("addresseeTelephone") String addresseeTelephone, @Param("addresseeAddress") String addresseeAddress);
+
+
 }
 
 
