@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class OrderAddress {
+public class  OrderAddress {
     private String orderId;
     private String addressId;
     private String addresseeName;

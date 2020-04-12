@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>订单详情</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" th:href="@{/lib/layui-v2.5.4/css/layui.css}" media="all">
+    <link rel="stylesheet" th:href="@{/lib/layui-v2.5.4/mods/extend/step/step.css}" media="all">
+    <script th:src="@{/lib/layui-v2.5.4/layui.js}" charset="utf-8"></script>
+    <script th:src="@{/lib/layui-v2.5.4/mods/extend/step/step.js}" charset="utf-8"></script>
+    <script th:src="@{/js/util/form.js}" charset="utf-8"></script>
+</head>
+<body>
+<br/><br/><br/>
+<div id="step" style="margin: 0 auto;" align="center"></div>
+<br/><br/><br/>
+<fieldset class="layui-elem-field" style="width: 800px;margin: 0 auto;">
+    <legend>订单详情</legend>
+    <div class="layui-field-box">
+        <form class="layui-form" style="margin: 0 auto;max-width:780px;padding-top: 10px;">
+            <p style="margin-left: 20px; font-size: 14px;"><i class="layui-icon layui-icon-triangle-d"></i>&nbsp;基本信息
+            </p>
+            <div class="layui-form-item layui-field-box" align="center">
+                <table class="layui-table" align="left" style="text-align: center;">
+                    <colgroup>
+                        <col width="355px">
+                        <col width="115px">
+                        <col width="115px">
+                    </colgroup>
+                    <thead>
+                    <td>订单ID</td>
+                    <td>买家ID</td>
+                    <td>订单状态</td>
+                    <td>下单时间</td>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>[[${order.orderId}]]</td>
+                        <td>￥[[${order.userId}]]</td>
+                        <td>待发货</td>
+                        <td>[[${order.createTime}]]</td>
+                    </tr>
+                </table>
+            </div>
+        </form>
+        <form class="layui-form" style="margin: 0 auto;max-width:780px;padding-top: 10px;">
+            <p style="margin-left: 20px; font-size: 14px;"><i class="layui-icon layui-icon-triangle-d"></i>&nbsp;收货人信息
+            </p>
+            <div class="layui-form-item layui-field-box" align="center">
+                <table class="layui-table" align="left" style="text-align: center;">
+                    <colgroup>
+                        <col width="115px">
+                        <col width="150px">
+                    </colgroup>
+                    <thead>
+                    <td>收货人</td>
+                    <td>手机号</td>
+                    <td>收货地址</td>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>[[${orderAddress.addresseeName}]]</td>
+                        <td>[[${orderAddress.addresseeTelephone}]]</td>
+                        <td>[[${orderAddress.addresseeAddress}]]</td>
+                    </tr>
+                </table>
+            </div>
+        </form>
+        <form class="layui-form" style="margin: 0 auto;max-width:780px;padding-top: 10px;">
+            <p style="margin-left: 20px; font-size: 14px;"><i class="layui-icon layui-icon-triangle-d"></i>&nbsp;教材信息
+            </p>
+            <div class="layui-form-item layui-field-box" align="center">
+                <table class="layui-table" align="left" style="text-align: center;">
+                    <colgroup>
+                        <col width="355px">
+                        <col width="115px">
+                        <col width="115px">
+                    </colgroup>
+                    <thead>
+                    <td>教材名称</td>
+                    <td>单&nbsp;&nbsp;&nbsp;&nbsp;价</td>
+                    <td>数&nbsp;&nbsp;&nbsp;&nbsp;量</td>
+                    </thead>
+                    <tbody>
+                    <tr th:each="item:${orderBookVOList}">
+                        <td>[[${item.bookName}]]</td>
+                        <td>￥[[${item.bookPrice}]]</td>
+                        <td>[[${item.buyNumber}]]</td>
+                    </tr>
+                    <tr>
+                        <td colspan="3" rowspan="2">
+                            <span style="font-size: 16px;color: #333;">总&nbsp;&nbsp;&nbsp;&nbsp;价：[[${order.orderAmount}]] 元</span>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div class="layui-form-item">
+                    <br/>
+                    <button th:if="${currentStatus==1}" type="button" class="layui-btn submitInfo">发货</button>
+                    <button th:if="${currentStatus==2}" type="button" class="layui-btn submitInfo">确认收货</button>
+                    <button th:if="${currentStatus==3}" type="button" class="layui-btn submitInfo">返回</button>
+                    <button th:if="${currentStatus==4}" type="button" class="layui-btn submitInfo">返回</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</fieldset>
+
+
+</body>
+<script th:inline="javascript">
+    layui.config({
+        base: '/lib/layui-v2.5.4/mods/extend/step/'
+    }).use(['form', 'step'], function () {
+        var $ = layui.$
+            , form = layui.form
+            , step = layui.step
+            , currentStatus = [[${currentStatus}]];
+
+        var data = {
+            steps: [
+                {"title": "已付款", "time": ""},
+                {"title": "已发货", "time": ""},
+                {"title": "完成", "time": ""},]
+            //这里current为当前步骤到第几个
+            , current: currentStatus
+        };
+        if (currentStatus == 4) {
+            data = {
+                steps: [
+                    {"title": "已付款", "time": ""},
+                    {"title": "已发货", "time": ""},
+                    {"title": "完成", "time": ""},
+                    {"title": "已退款", "time": ""}]
+                //这里current为当前步骤到第几个
+                , current: currentStatus
+            };
+        }
+
+
+        step.ready({
+            elem: '#step',
+            data: data,
+            width: '150px',
+            color: {
+                //success：为已经步骤通过的颜色
+                success: '#009688',
+                //error：为还没有通过步骤颜色
+                error: '#C0C0C0'
+            }
+        })
+
+        $('.submitInfo').on('click', function () {
+            if (currentStatus == 3 || currentStatus == 4) {
+                parent.location.reload();
+            }
+            var tip = "确认发货";
+            if (currentStatus == 2) {
+                tip = "确认收货";
+            }
+            layer.confirm(tip, {
+                btn: ['确认', '取消'] //按钮
+            }, function () {
+                var orderId = [[${order.orderId}]];
+                post("/toChangeOrderStatus", {"orderStatus": currentStatus, "orderId": orderId});
+                parent.location.reload();
+            }, function () {
+            });
+
+        });
+    })
+</script>
+</html>
+

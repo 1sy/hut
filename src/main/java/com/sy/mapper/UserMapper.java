@@ -23,4 +23,6 @@ public interface UserMapper {
     BigDecimal getUserBalance(@Param("userId") Long userId);
 
     Integer payOrder(@Param("userId") Long userId, @Param("userBalance") BigDecimal userBalance);
+
+    Integer getTotalCount();
 }

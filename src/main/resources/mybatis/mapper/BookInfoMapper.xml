@@ -82,6 +82,12 @@
     <select id="getBookStock" resultType="java.lang.Integer">
         select book_stock from book_info where book_id=#{bookId}
     </select>
+    <select id="getOrderBookVOByBookId" resultType="com.sy.pojo.vo.OrderBookVO">
+        select book_name,book_price  from book_info where book_id=#{bookId}
+    </select>
+    <select id="getTotalCount" resultType="java.lang.Integer">
+        select count(*) from book_info
+    </select>
 
     <update id="updateBookStock">
         update book_info set book_stock = #{bookStock} where book_id=#{bookId}

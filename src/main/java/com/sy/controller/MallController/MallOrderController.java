@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.sy.mapper.BookInfoMapper;
 import com.sy.mapper.OrderMapper;
 import com.sy.mapper.UserMapper;
+import com.sy.service.MallOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
@@ -16,7 +17,7 @@ import java.util.List;
 import java.util.Set;
 
 @Controller
-public class OrderController {
+public class MallOrderController {
     @Autowired
     UserMapper userMapper;
     @Autowired
@@ -25,6 +26,8 @@ public class OrderController {
     BookInfoMapper bookInfoMapper;
     @Autowired
     RedisTemplate<String, String> redisTemplate;
+    @Autowired
+    MallOrderService mallOrderService;
 
     @ResponseBody
     @PostMapping("/mall/toCheckUserBalance")
@@ -75,6 +78,25 @@ public class OrderController {
                                      @RequestParam("addresseeTelephone") String addresseeTelephone,
                                      @RequestParam("addresseeAddress") String addresseeAddress) {
         return orderMapper.addOrderAddress(orderId, addresseeName, addresseeTelephone, addresseeAddress) > 0 ? 1 : 0;
+    }
+
+
+    @ResponseBody
+    @PostMapping("/mall/toAddOrderTransactional")
+    public Integer toAddOrderTransactional(@RequestParam("orderId") String orderId,
+                                           @RequestParam("userId") Long userId,
+                                           @RequestParam("orderAmount") BigDecimal orderAmount,
+                                           @RequestParam("buyList") String list,
+                                           @RequestParam("addresseeName") String addresseeName,
+                                           @RequestParam("addresseeTelephone") String addresseeTelephone,
+                                           @RequestParam("addresseeAddress") String addresseeAddress,
+                                           @RequestParam("bookIdList") String bookList) {
+        try {
+            mallOrderService.toAddOrder(orderId, userId, orderAmount, list, addresseeName, addresseeTelephone, addresseeAddress, bookList);
+        } catch (Exception e) {
+            return 0;
+        }
+        return 1;
     }
 
 }

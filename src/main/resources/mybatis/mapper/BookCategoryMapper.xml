@@ -32,6 +32,9 @@
     <select id="checkCategoryName" resultType="com.sy.pojo.BookCategory">
     select * from book_category where category_name = #{categoryName}
     </select>
+    <select id="getTotalCount" resultType="java.lang.Integer">
+        select count(*) from book_category
+    </select>
 
     <update id="updateBookCategory">
     update book_category set category_type = #{categoryType},category_name = #{categoryName}  where category_id = #{categoryId}

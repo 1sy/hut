@@ -232,42 +232,57 @@
             $.post("/mall/toCheckUserBalance", {"totalPrice": totalPrice, "userId": userId}, function (result) {
                 if (result == 1) { //代表 余额充足
 
-                    //这个地方分三个表单提交    首先 订单表  需要事务
-                    $.post("/mall/toAddOrder", {"orderId": orderId, "userId": userId, "orderAmount": totalPrice}
-                        , function (result) {
-                            if (result != 1) {
-                                layer.msg("添加订单失败");
-                            }
-                        });
-
-                    //第二个  订单项
-                    $.post("/mall/toAddOrderItem", {"buyList": [[${buyList}]], "orderId": orderId}
-                        , function (result) {
-                            if (result != 1) {
-                                layer.msg("添加订单项失败");
-                            }
-                        });
-                    //第三个  订单地址
-                    $.post("/mall/toAddOrderAddress", {
+                    // //这个地方分三个表单提交    首先 订单表  需要事务
+                    // $.post("/mall/toAddOrder", {"orderId": orderId, "userId": userId, "orderAmount": totalPrice}
+                    //     , function (result) {
+                    //         if (result != 1) {
+                    //             layer.msg("添加订单失败");
+                    //         }
+                    //     });
+                    //
+                    // //第二个  订单项
+                    // $.post("/mall/toAddOrderItem", {"buyList": [[${buyList}]], "orderId": orderId}
+                    //     , function (result) {
+                    //         if (result != 1) {
+                    //             layer.msg("添加订单项失败");
+                    //         }
+                    //     });
+                    // //第三个  订单地址
+                    // $.post("/mall/toAddOrderAddress", {
+                    //         "orderId": orderId,
+                    //         "addresseeName": addresseeName,
+                    //         "addresseeTelephone": addresseeTelephone,
+                    //         "addresseeAddress": addresseeAddress
+                    //     }
+                    //     , function (result) {
+                    //         if (result != 1) {
+                    //             layer.msg("添加订单项失败");
+                    //         }
+                    //     });
+                    //
+                    // //最后删除购物车项
+                    // $.post("/mall/toDeleteOrderItem", {"bookIdList": JSON.stringify(bookIdList), "userId": userId},
+                    //     function (result) {
+                    //         if (result != 1) {
+                    //             layer.msg("购物车项删除失败");
+                    //         }
+                    //     });
+                    // //下单成功后 如果是购物车操作 购物车要删除
+                    $.post("/mall/toAddOrderTransactional", {
                             "orderId": orderId,
+                            "userId": userId,
+                            "orderAmount": totalPrice,
+                            "buyList": [[${buyList}]],
                             "addresseeName": addresseeName,
                             "addresseeTelephone": addresseeTelephone,
-                            "addresseeAddress": addresseeAddress
-                        }
-                        , function (result) {
-                            if (result != 1) {
-                                layer.msg("添加订单项失败");
-                            }
-                        });
-
-                    //最后删除购物车项
-                    $.post("/mall/toDeleteOrderItem", {"bookIdList": JSON.stringify(bookIdList), "userId": userId},
+                            "addresseeAddress": addresseeAddress,
+                            "bookIdList": JSON.stringify(bookIdList)
+                        },
                         function (result) {
                             if (result != 1) {
                                 layer.msg("购物车项删除失败");
                             }
                         });
-                    //下单成功后 如果是购物车操作 购物车要删除
                 } else {
                     layer.msg("余额不足，下单失败");
                 }

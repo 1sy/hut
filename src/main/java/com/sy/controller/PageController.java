@@ -2,10 +2,12 @@ package com.sy.controller;
 
 import com.sy.mapper.BookCategoryMapper;
 import com.sy.mapper.BookInfoMapper;
+import com.sy.mapper.OrderMapper;
 import com.sy.mapper.UserMapper;
 import com.sy.pojo.BookCategory;
 import com.sy.pojo.BookInfo;
 import com.sy.pojo.User;
+import com.sy.pojo.vo.OrderIndexVO;
 import com.sy.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -27,6 +29,8 @@ public class PageController {
     BookService bookService;
     @Autowired
     BookInfoMapper bookInfoMapper;
+    @Autowired
+    OrderMapper orderMapper;
 
     @RequestMapping("/login")
     public String toLogin() {
@@ -43,8 +47,19 @@ public class PageController {
         return "index";
     }
 
+    //这个地方往首页发数据
     @RequestMapping("/main")
-    public String toMain() {
+    public String toMain(Model model) {
+        Integer userCount = userMapper.getTotalCount();
+        Integer orderCount = orderMapper.getTotalCount();
+        Integer bookCount = bookInfoMapper.getTotalCount();
+        Integer bookCategoryCount = bookCategoryMapper.getTotalCount();
+        List<OrderIndexVO> orderList = orderMapper.getRecentOrder();
+        model.addAttribute("userCount", userCount);
+        model.addAttribute("orderCount", orderCount);
+        model.addAttribute("bookCount", bookCount);
+        model.addAttribute("bookCategoryCount", bookCategoryCount);
+        model.addAttribute("orderList", orderList);
         return "page/welcome-1";
     }
 
@@ -93,4 +108,28 @@ public class PageController {
         return "page/book-update";
     }
 
+    @RequestMapping("/toOrder1")
+    public String order1() {
+        return "page/order-1";
+    }
+
+    @RequestMapping("/toOrder2")
+    public String order2() {
+        return "page/order-2";
+    }
+
+    @RequestMapping("/toOrder3")
+    public String order3() {
+        return "page/order-3";
+    }
+
+    @RequestMapping("/toOrder4")
+    public String order4() {
+        return "page/order-4";
+    }
+
+    @RequestMapping("/orderInfo")
+    public String orderInfo() {
+        return "page/order-info";
+    }
 }

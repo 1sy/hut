@@ -16,4 +16,49 @@
     <insert id="addOrderAddress">
         insert into order_address (order_id, addressee_name, addressee_telephone, addressee_address) values (#{orderId},#{addresseeName},#{addresseeTelephone},#{addresseeAddress})
     </insert>
+    <update id="changeOrderStatus">
+        update `order` set order_status = #{orderStatus} where order_id=#{orderId}
+    </update>
+    <update id="multipleChangeStatus">
+        update `order` set order_status = #{orderStatus} where order_id in
+        <foreach collection="orderIdList" index="index" item="orderId" open="(" separator="," close=")">
+            #{orderId}
+        </foreach>
+    </update>
+    <select id="getOrderByStatus" resultType="com.sy.pojo.vo.OrderVO">
+    select order_id, user_id, order_amount,create_time from `order` where order_status=#{orderStatus} limit #{page},#{limit}
+    </select>
+    <select id="getCountByStatus" resultType="java.lang.Integer">
+        select count(*) from `order` where order_status=#{orderStatus}
+    </select>
+
+    <select id="getOrderByOrderId" resultType="com.sy.pojo.vo.OrderInfoVO">
+        select order_id, user_id, order_amount,DATE_FORMAT(create_time, '%Y-%m-%d %T') AS create_time from `order` where order_id=#{orderId}
+    </select>
+
+    <select id="getOrderAddressByOrderId" resultType="com.sy.pojo.OrderAddress">
+        select addressee_name, addressee_telephone, addressee_address from order_address where order_id=#{orderId}
+    </select>
+
+    <select id="getOrderItemsByOrderId" resultType="com.sy.pojo.OrderItem">
+        select book_id, buy_number from order_item where order_id=#{orderId}
+    </select>
+    <select id="searchOrder" resultType="com.sy.pojo.vo.OrderVO">
+        SELECT order_id, user_id, order_amount,create_time FROM `order` WHERE order_status= #{orderStatus} AND order_id=#{orderId} AND create_time LIKE #{createTime} limit #{page},#{limit}
+    </select>
+    <select id="searchOrderByCreateTime" resultType="com.sy.pojo.vo.OrderVO">
+        SELECT order_id, user_id, order_amount,create_time FROM `order` WHERE order_status= #{orderStatus}  AND create_time LIKE #{createTime} limit #{page},#{limit}
+    </select>
+    <select id="searchOrderByOrderId" resultType="com.sy.pojo.vo.OrderVO">
+        SELECT order_id, user_id, order_amount,create_time FROM `order` WHERE order_status= #{orderStatus} AND order_id=#{orderId}  limit #{page},#{limit}
+    </select>
+    <select id="getTotalCount" resultType="java.lang.Integer">
+        select count(*) from `order`
+    </select>
+    <select id="getRecentOrder" resultType="com.sy.pojo.vo.OrderIndexVO">
+       select order_id,order_amount,order_status,DATE_FORMAT(create_time, '%Y-%m-%d  %T') AS create_time from `order` order by create_time DESC LIMIT 0,5
+    </select>
+    <select id="getOrderRefundByOrderId" resultType="com.sy.pojo.dto.OrderRefundDTO">
+        select user_id,order_amount,order_status from `order` where order_id=#{orderId}
+    </select>
 </mapper>

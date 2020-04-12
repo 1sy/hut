@@ -30,4 +30,6 @@ public interface BookCategoryMapper {
     Integer updateBookCategory(@Param("categoryType") Integer categoryType, @Param("categoryName") String categoryName, @Param("categoryId") Integer categoryId);
 
     Integer deleteBookCategory(@Param("categoryId") Integer categoryId);
+
+    Integer getTotalCount();
 }

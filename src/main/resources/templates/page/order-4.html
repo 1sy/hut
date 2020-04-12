@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>已退款</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" th:href="@{/lib/layui-v2.5.4/css/layui.css}" media="all">
+    <style>
+        .layui-table-cell {
+            height: 45px;
+            line-height: 45px;
+        }
+    </style>
+</head>
+<body>
+<!-- 头部左侧工具栏 -->
+<script type="text/html" id="toolbarDemo">
+    <form class="layui-form layui-form-pane" action="">
+        <div class="layui-form-item">
+            <label class="layui-form-label">订单ID</label>
+            <div class="layui-input-inline">
+                <input id="orderId" type="text" required name="orderId" autocomplete="off" class="layui-input">
+            </div>
+            <label class="layui-form-label">生成时间</label>
+            <div class="layui-input-inline">
+                <input type="text" class="layui-input" id="createTime" name="createTime" autocomplete="off"
+                       placeholder="yyyy-MM-dd">
+            </div>
+            <div class="layui-inline">
+                <button class="layui-btn data-add-btn" lay-event="toSearchOrder" type="button">搜索</button>
+            </div>
+        </div>
+    </form>
+</script>
+
+<!--表格-->
+<table class="layui-hide" id="test" lay-filter="test"></table>
+<script type="text/html" id="barDemo">
+    <a class="layui-btn layui-btn-xs" lay-event="main">详情</a>
+</script>
+
+<script th:src="@{/lib/layui-v2.5.4/layui.js}" charset="utf-8"></script>
+<script th:src="@{/lib/jquery-3.4.1/jquery-3.4.1.min.js}"></script>
+<script>
+    layui.use(['form', 'table', 'layer', 'laydate'], function () {
+        var $ = layui.jquery,
+            form = layui.form,
+            table = layui.table,
+            layer = layui.layer,
+            laydate = layui.laydate;
+        //日期选择器
+        laydate.render({
+            elem: '#createTime'
+        });
+
+        //表格渲染
+        var mainTable = table.render({
+            elem: '#test',
+            id: 'table',
+            url: '/getOrderTable?orderStatus=3',
+            toolbar: '#toolbarDemo', //开启头部工具栏，并为其绑定左侧模板
+            cellMinWidth: 100,
+
+            defaultToolbar: ['filter', 'exports'],
+            title: '用户数据表',
+            cols: [
+                [{
+                    field: 'orderId',
+                    title: '订单ID'
+                }, {
+                    field: 'userId',
+                    title: '买家ID',
+                    align: 'center'
+                }, {
+                    field: 'orderAmount',
+                    title: '价格',
+                    sort: true,
+                    align: 'center'
+                }, {
+                    field: 'createTime',
+                    title: '生成时间',
+                    sort: true,
+                    align: 'center'
+                }, {
+                    fixed: 'right',
+                    title: '操作',
+                    toolbar: '#barDemo',
+                    align: 'center'
+                }]
+            ],
+            page: true
+        });
+        var orderId = "";
+        var createTime = "";
+        //头工具栏  批量
+        table.on('toolbar(test)', function (obj) {
+            var checkStatus = table.checkStatus(obj.config.id);
+            if (obj.event == 'toSearchOrder') {
+
+                if ($('#orderId').val() != null) {
+                    orderId = $('#orderId').val();
+                }
+                if ($('#createTime').val() != null) {
+                    createTime = $('#createTime').val();
+                }
+                //执行搜索重载
+                reload();
+                //阻止表单提交
+                return false;
+            }
+        });
+
+
+        //监听行工具事件  详情
+        table.on('tool(test)', function (obj) {
+            //获得当前行数据 所有   获取单个的话 直接 data.属性名
+            var data = obj.data;
+            if (obj.event === 'main') {
+                window.location.href = "/toOrderInfo?currentStatus=4&orderId=" + data.orderId;
+
+            }
+        });
+
+        function reload() {
+            mainTable.reload({
+                page: { //表示重载后从第几页开始
+                    curr: 1
+                }
+                , where: {  //携带的参数
+                    orderStatus: 0,
+                    orderId: orderId,
+                    createTime: createTime
+                }
+            });
+            laydate.render({
+                elem: '#createTime'
+            });
+        }
+    });
+</script>
+</body>
+</html>

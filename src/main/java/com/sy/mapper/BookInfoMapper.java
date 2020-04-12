@@ -2,6 +2,7 @@ package com.sy.mapper;
 
 import com.sy.pojo.BookInfo;
 import com.sy.pojo.dto.OrderCheckDTO;
+import com.sy.pojo.vo.OrderBookVO;
 import com.sy.pojo.vo.ShoppingItemVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -58,8 +59,12 @@ public interface BookInfoMapper {
 
     Integer getCountByCategory(@Param("categoryType") Integer categoryType);
 
-    Integer getBookStock(@Param("bookId")String bookId);
+    Integer getBookStock(@Param("bookId") String bookId);
 
 
-    Integer updateBookStock(@Param("bookId")String bookId, @Param("bookStock")Integer bookStock);
+    Integer updateBookStock(@Param("bookId") String bookId, @Param("bookStock") Integer bookStock);
+
+    OrderBookVO getOrderBookVOByBookId(@Param("bookId") String bookId);
+
+    Integer getTotalCount();
 }
